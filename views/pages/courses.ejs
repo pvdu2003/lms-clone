@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('../partials/main') %>
+</head>
+<% if(typeof err === 'undefined') err = {} %>
+<% if(typeof user === 'undefined') user = {} %>
+<% if(typeof courses === 'undefined') courses = {} %>
+<body>
+  <div class="container bg-white border-top border-4 border-success">
+    <%- include('../partials/header') %>
+    <h3>All Courses</h3>
+    <ul class="list-group list-group-flush my-3">
+      <% for(let i = 0; i < courses.length; i++) { %> 
+        <li class="d-flex list-group-item">
+            <a class="col-10 text-decoration-none" href="/courses/<%= courses[i].slug %>">
+              <%= courses[i].c_id %>[<%= courses[i].faculty %>] <%= courses[i].name_en %> - <%= courses[i].name_vn %>
+            </a>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <form action="/courses/edit/<%= courses[i]._id %>" method="post">
+                    <input type="hidden" name="courseId" value="<%= courses[i]._id %>">
+                    <button class="btn btn-primary me-md-2" type="submit">Edit</button>
+                </form>
+                <!-- <button class="btn btn-danger" type="button">Delete</button> -->
+                <button type="button" class="mx-2 btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteCourse-<%= i+1 %>">Delete</button>
+
+              <!-- Modal -->
+              <div class="modal fade" id="deleteCourse-<%= i+1 %>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="exampleModalLabel">Confirm this action</h1>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <p>Are you sure to delete this course?</p>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>                    
+                      <form method="POST" action="/courses/<%= courses[i].slug %>?_method=DELETE">
+                        <input type="hidden" name="courseId" value="<%= courses[i].c_id %>">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </li>
+        <% } %>
+    </ul>
+        <%- include('../partials/pagination') %>
+        <%- include('../partials/footer') %>
+  </div>
+
+</body>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('../../partials/main') %>
+</head>
+<% if(typeof err === 'undefined') err = {} %>
+<% if(typeof user === 'undefined') user = {} %>
+<% if(typeof users === 'undefined') users = {} %>
+<body>
+    <div class="container bg-white border-top border-4 border-success">
+        <%- include('../../partials/header') %>
+        <% if(users.length > 0) { %>
+        <h3 class="mx-4 my-3">All users in this system</h3>
+        <table class="table table-hover table-striped">
+            <thead>
+                <tr>
+                    <!-- <th scope="col"></th> -->
+                    <th scope="col">#</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Role</th>
+                    <th scope="col">Profile</th>
+                    <th scope="col" class="col-6 text-center">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for(let i = 0; i < users.length; i++) { %> 
+                    <tr>
+                      <th scope="row"><%= i+1 %></th>
+                      <td><%= users[i].username %></td>
+                      <td><%= users[i].name %></td>
+                      <td class="text-capitalize"><%= users[i].role %></td>
+                      <td><a href="/user/profile/<%= users[i]._id %>" class="text-decoration-none">Profile</a></td>
+                      <td>
+                        <div class="d-flex justify-content-center">
+                          <form class="role-form" method="POST" action="/user/update-role">
+                            <input type="hidden" name="_id" value="<%= users[i]._id %>">
+                            <select class="role-select me-3" name="newRole" required>
+                              <option selected disabled>Change user's role</option>
+                              <option value="student">Student</option>
+                              <option value="teacher">Teacher</option>
+                              <option value="admin">Admin</option>
+                            </select>
+                            <button type="submit" class="mx-2 btn btn-primary">Update role</button>
+                          </form>
+                          <button type="button" class="mx-2 btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteUser">Delete user</button>
+                          
+                          <form class="cancel-form" method="POST" action="/user/cancel-action">
+                            <input type="hidden" name="userId" value="<%= users[i]._id %>">
+                            <button type="submit" class="mx-2 btn btn-secondary">Cancel</button>
+                          </form>
+                        </div>
+                      </td>
+                      <!-- Modal -->
+                      <div class="modal fade" id="deleteUser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h1 class="modal-title fs-5" id="exampleModalLabel">Confirm this action</h1>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                              <p>Are you sure to update role of this user?</p>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                              <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                              <form class="delete-form" method="POST" action="/user/update-role">
+                                <input type="hidden" name="userId" value="<%= users[i]._id %>">
+                                <button type="submit" class="mx-2 btn btn-primary">Delete user</button>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </tr>
+                  <% } %> 
+              </tbody>
+          </table>
+          <% } else { %>
+              <h3 class="text-center">No users here!</h3>
+          <% } %>
+      </ul>
+      <%- include('../../partials/footer') %>
+  </div>
+                            
+                   
+
+</body>
