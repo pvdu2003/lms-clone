@@ -1,104 +1,182 @@
 <div class="mt-3 pb-1">
   <div class="d-flex mt-2 justify-content-between align-items-center">
-      <a href="/home"><img src="//lms.fit.hanu.vn/pluginfile.php/1/theme_lambda/logo/1697255536/fit-logo1.png" class="img-logo" alt="logo"></a>
-      <div class="d-flex justify-content-end align-items-center">
-        <% if (Object.keys(user).length !== 0) { %>
-          <div class="dropdown">
-            <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <span class="main-color me-2 fs-2 fw-semibold text-capitalize"><%- user.username %></span>
-              <span class="main-color fs-2 fw-semibold text-capitalize"><%- user.name %></span>
-            </button>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="/user/profile">Profile</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <% if(user.role === 'admin') { %>
-                <li>
-                  <a class='dropdown-item' href='/courses/create'>Create new courses</a> 
-                </li>  
-                <li>
-                  <a class='dropdown-item' href='/courses/edit'>Edit course</a> 
-                </li>  
-                <li>
-                  <a class='dropdown-item' href='#'>Delete course</a> 
-                </li>
-                <li><hr class="dropdown-divider"></li>
-                <li>
-                  <a class='dropdown-item' href='/user/showUser'>Show user</a> 
-                </li>  
-                <li><hr class="dropdown-divider"></li>
-              <% } %>
-              <li><a class="dropdown-item" href="/logout">Log out</a></li>
-            </ul>
-          </div>
-          <% if(user.avatar) { %>
-            <img src="<%- user.avatar %>" class="rounded-circle" alt="avatar"><a href="/user/profile"></a>
-          <% } else { %>
-            <a href="/user/profile" class="text-decoration-none link-light">
-            <span class="d-flex align-items-center justify-content-center avatar rounded-circle text-uppercase">
-              <%- user.username ? user.username[0] : '' %><%- user.name ? user.name[0] : '' %>
-            </span>
-          </a>
+    <a href="/home"
+      ><img
+        src="//lms.fit.hanu.vn/pluginfile.php/1/theme_lambda/logo/1697255536/fit-logo1.png"
+        class="img-logo"
+        alt="logo"
+    /></a>
+    <div class="d-flex justify-content-end align-items-center">
+      <% if (Object.keys(user).length !== 0) { %>
+      <div class="dropdown">
+        <button
+          class="btn dropdown-toggle"
+          type="button"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          <span class="main-color me-2 fs-2 fw-semibold text-capitalize"
+            ><%- user.username %></span
+          >
+          <span class="main-color fs-2 fw-semibold text-capitalize"
+            ><%- user.name %></span
+          >
+        </button>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="/user/profile">Profile</a></li>
+          <li><hr class="dropdown-divider" /></li>
+          <% if(user.role === 'admin') { %>
+          <li>
+            <a class="dropdown-item" href="/courses/create"
+              >Create new courses</a
+            >
+          </li>
+          <li>
+            <a class="dropdown-item" href="/courses/edit">Edit course</a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="#">Delete course</a>
+          </li>
+          <li><hr class="dropdown-divider" /></li>
+          <li>
+            <a class="dropdown-item" href="/user/showUser">Show user</a>
+          </li>
+          <li><hr class="dropdown-divider" /></li>
           <% } %>
-        <% } else { %>
-          <form method="post" action="/">
-            <div class="d-flex justify-content-end">
-              <div class="col-md-5 w-40">
-                <label class="visually-hidden" for="username">Username</label>
-                <div class="input-group">
-                  <div class="input-group-text">@</div>
-                  <input type="text" class="form-control" id="username" name="username" placeholder="Username">
-                </div>
-                <div class="err-message text-danger fst-italic"><%= err.username %></div>
-              </div>
-              <div class="col-md-5 w-40 px-2">
-                <label class="visually-hidden" for="password">password</label>
-                <div class="input-group">
-                  <div class="input-group-text">#</div>
-                  <input type="password" class="form-control" id="password" name="password" placeholder="Password">
-                </div>
-                <div class="err-message text-danger fst-italic"><%= err.password %></div>
-              </div>
-              <button class="btn btn-success flex-shrink-1" type="submit">></button>
-            </div>
-            <p class="text-end">If you do not have account, please sign in first by <a href="/signin">clicking here</a></p>
-          </form>
-        <% } %>
+          <li><a class="dropdown-item" href="/logout">Log out</a></li>
+        </ul>
       </div>
+      <% if(user.avatar) { %>
+      <img src="<%- user.avatar %>" class="rounded-circle" alt="avatar" /><a
+        href="/user/profile"
+      ></a>
+      <% } else { %>
+      <a href="/user/profile" class="text-decoration-none link-light">
+        <span
+          class="d-flex align-items-center justify-content-center avatar rounded-circle text-uppercase"
+        >
+          <%- user.username ? user.username[0] : '' %><%- user.name ?
+          user.name[0] : '' %>
+        </span>
+      </a>
+      <% } %> <% } else { %>
+      <form method="post" action="/">
+        <div class="d-flex justify-content-end">
+          <div class="col-md-5 w-40">
+            <label class="visually-hidden" for="username">Username</label>
+            <div class="input-group">
+              <div class="input-group-text">@</div>
+              <input
+                type="text"
+                class="form-control"
+                id="username"
+                name="username"
+                placeholder="Username"
+              />
+            </div>
+            <div class="err-message text-danger fst-italic">
+              <%= err.username %>
+            </div>
+          </div>
+          <div class="col-md-5 w-40 px-2">
+            <label class="visually-hidden" for="password">password</label>
+            <div class="input-group">
+              <div class="input-group-text">#</div>
+              <input
+                type="password"
+                class="form-control"
+                id="password"
+                name="password"
+                placeholder="Password"
+              />
+            </div>
+            <div class="err-message text-danger fst-italic">
+              <%= err.password %>
+            </div>
+          </div>
+          <button class="btn btn-success flex-shrink-1" type="submit">></button>
+        </div>
+        <p class="text-end">
+          If you do not have account, please sign in first by
+          <a href="/signin">clicking here</a>
+        </p>
+      </form>
+      <% } %>
+    </div>
   </div>
   <nav class="navbar navbar-expand-lg bg-dark py-2">
     <div class="container-fluid">
       <a class="navbar-brand text-center py-auto" href="/home">Fit</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarTogglerDemo02"
+        aria-controls="navbarTogglerDemo02"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0 h-100">
           <% if (Object.keys(user).length !== 0) { %>
-            <li class="nav-item h-100">
-              <a class="nav-link py-3" aria-current="page" href="/courses">Dashboard</a>
-            </li>
-            <li class="nav-item h-100">
-              <a class="nav-link py-3" href="#">My courses</a>
-            </li>
-          <% }  %>
-            <li class="nav-item h-100 dropdown-center">
-              <a class="nav-link py-3 btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Training Programs</a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="/courses">Bachelor programs in Information Technology</a></li>
-                <li><a class="dropdown-item" href="/courses">Bachelor programs in Multimedia Communication</a></li>                
-              </ul>
-            </li>
-            <li class="nav-item h-100">
-              <a class="nav-link py-3" aria-current="page" href="/user/getTeachers">Teachers</a>
-            </li>
-            <li class="nav-item h-100">
-              <a class="nav-link py-3" aria-current="page" href="/user/getStudents">Students</a>
-            </li>
+          <li class="nav-item h-100">
+            <a class="nav-link py-3" aria-current="page" href="/courses"
+              >Dashboard</a
+            >
+          </li>
+          <li class="nav-item h-100">
+            <a class="nav-link py-3" href="#">My courses</a>
+          </li>
+          <% } %>
+          <li class="nav-item h-100 dropdown-center">
+            <a
+              class="nav-link py-3 btn btn-secondary dropdown-toggle"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              >Training Programs</a
+            >
+            <ul class="dropdown-menu">
+              <li>
+                <a class="dropdown-item" href="/courses"
+                  >Bachelor programs in Information Technology</a
+                >
+              </li>
+              <li>
+                <a class="dropdown-item" href="/courses"
+                  >Bachelor programs in Multimedia Communication</a
+                >
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item h-100">
+            <a
+              class="nav-link py-3"
+              aria-current="page"
+              href="/user/getTeachers"
+              >Teachers</a
+            >
+          </li>
+          <li class="nav-item h-100">
+            <a
+              class="nav-link py-3"
+              aria-current="page"
+              href="/user/getStudents"
+              >Students</a
+            >
+          </li>
         </ul>
         <form class="d-flex" role="search">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+          <input
+            class="form-control me-2"
+            type="search"
+            placeholder="Search"
+            aria-label="Search"
+          />
           <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>  
+        </form>
       </div>
     </div>
   </nav>

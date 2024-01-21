@@ -1,21 +1,21 @@
 <nav aria-label="Page navigation example">
-    <ul class="pagination justify-content-center">
-      <% if(page > 1) { %>
-        <li class="page-item">
-            <a class="page-link" href="/courses/?page=<%= page - 1 %>">
-              <span aria-hidden="true">&laquo;</span>
-            </a>
-        </li>
-      <% } %>
-      <% for(let i = 1; i <= totalPages; i++) { %>
-        <li class="page-item"><a class="page-link" href="/courses/?page=<%= i %>"><%= i %></a></li>
-      <% } %>
-    <% if(page < totalPages) { %>
-      <li class="page-item">
-        <a class="page-link" href="/courses/?page=<%= page + 1 %>">
-          <span aria-hidden="true">&raquo;</span>
-        </a>
-      </li>
+  <ul class="pagination justify-content-center">
+    <% if(page > 1) { %>
+    <li class="page-item">
+      <a class="page-link" href="/courses/?page=<%= page - 1 %>">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    <% } %> <% for(let i = 1; i <= totalPages; i++) { %>
+    <li class="page-item">
+      <a class="page-link" href="/courses/?page=<%= i %>"><%= i %></a>
+    </li>
+    <% } %> <% if(page < totalPages) { %>
+    <li class="page-item">
+      <a class="page-link" href="/courses/?page=<%= page + 1 %>">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
     <% } %>
-    </ul>
-  </nav>
+  </ul>
+</nav>
