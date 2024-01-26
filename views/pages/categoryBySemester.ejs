@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/main') %>
+  </head>
+  <% if(typeof user === 'undefined') user = {} %>
+  <body>
+    <div class="container bg-white border-top border-4 border-success">
+      <%- include('../partials/header') %>
+      <div class="d-flex mx-2 my-3 flex-column">
+        <h3 class="fs-2 fw-bold text-black">
+          All courses for <%= faculty %> faculty
+        </h3>
+        <img class="my-3" src="/category-bg.jpg" alt="" />
+        <% semesters.forEach(semester => { %> <% let cutIndex =
+        semester.indexOf(" - ") %> <% let semester_en =
+        semester.slice(0,cutIndex) %>
+        <a
+          href="/courses/faculty/<%= faculty %>/<%= semester_en %>"
+          class="ms-3 py-2 fs-4 fw-bold text-decoration-none text-black border-bottom"
+          ><%= semester %></a
+        >
+
+        <% }) %>
+      </div>
+      <%- include('../partials/footer') %>
+    </div>
+  </body>
+</html>
