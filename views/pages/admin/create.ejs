@@ -9,7 +9,7 @@
 <body>
     <% if (typeof err === 'undefined') err = {};%>
 <body>
-    <div class="container bg-white border-top border-4 border-success">
+    <div class="app container bg-white border-top border-4 border-success">
         <%- include('../../partials/header') %>
         <div class="d-flex flex-column justify-content-center mx-5 p-4" style="background-color: #e9e9e9;">
             <h2 class="text-center">Create new courses</h2>
@@ -59,10 +59,22 @@
                     <textarea class="form-control" rows="3" name="description" placeholder="Enter course's description"></textarea>
                     <div class="err-message text-danger fst-italic"></div>
                 </div>
-                <div class="form-group my-2">
-                    <label for="code" class="form-label fw-semibold">Code to enroll course</label>
-                    <input type="text" class="form-control" name="code" placeholder="Enter course's code">
-                    <div class="err-message text-danger fst-italic"><%= err.code %></div>
+                <div class="form-group my-2 row">
+                    <!-- <div class="col-md-6">
+                        <label for="code" class="form-label fw-semibold">Code to enroll course</label>
+                        <input type="text" class="form-control" name="code" placeholder="Enter course's code">
+                        <div class="err-message text-danger fst-italic"><%= err.code %></div>
+                    </div> -->
+                    <div class="col-md-6">
+                        <label for="teacher" class="form-label fw-semibold">Teacher's name</label>
+                        <select id="teacher" class="form-select" name="teacher">
+                            <option selected disabled>Choose teacher</option>
+                            <option value="IT">IT</option>  
+                            <option value="MME">MME</option>  
+                            <option value="MMU">MMU</option>  
+                        </select>
+                        <div class="err-message text-danger fst-italic"></div>
+                    </div>
                 </div>
                 <div class="form-group my-2">
                     <label for="image" class="form-label fw-semibold">Image for this course</label>

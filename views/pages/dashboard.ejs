@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Courses</title>
+    <%- include('../partials/main') %>
+  </head>
+  <% if(typeof user === 'undefined') user = {} %> <% if(typeof courses ===
+  'undefined') courses = {} %>
+  <body>
+    <div class="app container bg-white border-top border-4 border-success">
+      <%- include('../partials/header') %>
+      <h3 class="ms-5">My Courses</h3>
+      <ul class="list-group list-group-flush my-3">
+        <% for(let i = 0; i < courses.length; i++) { %>
+        <li class="d-flex list-group-item">
+          <a
+            class="col-10 text-decoration-none"
+            href="/courses/<%= courses[i].slug %>"
+          >
+            <%= courses[i].c_id %>[<%= courses[i].faculty %>] <%=
+            courses[i].name[0] %> - <%= courses[i].name[1] %>
+          </a>
+        </li>
+        <% } %>
+      </ul>
+      <%- include('../partials/footer') %>
+    </div>
+  </body>
+</html>

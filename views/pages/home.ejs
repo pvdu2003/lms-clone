@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <title>Home</title>
     <%- include('../partials/main') %>
   </head>
   <% if(typeof err === 'undefined') err = {} %> <% if(typeof user ===
   'undefined') user = {} %>
   <body>
-    <div class="container bg-white border-top border-4 border-success">
+    <div class="app container bg-white border-top border-4 border-success">
       <%- include('../partials/header') %>
       <div id="carouselExampleRide" class="carousel slide" data-bs-ride="true">
         <div class="carousel-inner">
@@ -54,7 +55,7 @@
           <span class="visually-hidden">Next</span>
         </button>
       </div>
-      <div class="clearfix">
+      <div class="clearfix mx-4">
         <img
           src="https://lms.fit.hanu.vn/pluginfile.php/67/mod_label/intro/anh-welcome-6.jpeg"
           alt="Welcome"

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Course Categories</title>
+    <%- include('../partials/main') %>
+    <script>
+      window.addEventListener("load", init);
+      function init() {
+        const switchCheckbox = document.getElementById(
+          "flexSwitchCheckReverse"
+        );
+
+        switchCheckbox.addEventListener("change", function () {
+          if (this.checked) {
+            console.log("Switch is on");
+            // Perform actions when switch is on
+          } else {
+            console.log("Switch is off");
+            // Perform actions when switch is off
+          }
+        });
+      }
+    </script>
+  </head>
+  <% if(typeof user === 'undefined') user = {} %> <% if(typeof course ===
+  'undefined') course = {} %>
+  <body>
+    <div class="app container bg-white border-top border-4 border-success">
+      <%- include('../partials/header') %>
+
+      <div class="d-flex mx-4 mt-3 mb-5 flex-column">
+        <% if(user.role !== "student" ) { %>
+        <div class="form-check form-switch form-check-reverse">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="flexSwitchCheckReverse"
+          />
+          <label class="form-check-label" for="flexSwitchCheckReverse"
+            >Open edit mode</label
+          >
+        </div>
+        <%} %>
+        <h4><%= course.name[0] %></h4>
+      </div>
+      <%- include('../partials/footer') %>
+    </div>
+  </body>
+</html>

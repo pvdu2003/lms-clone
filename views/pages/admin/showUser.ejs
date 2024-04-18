@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <title>Show users</title>
     <%- include('../../partials/main') %>
   </head>
   <% if(typeof err === 'undefined') err = {} %> <% if(typeof user ===
   'undefined') user = {} %> <% if(typeof users === 'undefined') users = {} %>
   <body>
-    <div class="container bg-white border-top border-4 border-success">
+    <div class="app container bg-white border-top border-4 border-success">
       <%- include('../../partials/header') %> <% if(users.length > 0) { %>
       <h3 class="mx-4 my-3">All users in this system</h3>
       <table class="table table-hover table-striped">

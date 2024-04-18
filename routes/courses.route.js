@@ -16,13 +16,13 @@ router.post(
   authorizeUser("admin"),
   courseController.create
 );
-router.post(
+router.get(
   "/edit/:id",
   authenticateUser,
   authorizeUser(["admin", "teacher"]),
   courseController.renderEditForm
 );
-router.put(
+router.post(
   "/edit/:id",
   authenticateUser,
   authorizeUser(["admin", "teacher"]),
@@ -34,21 +34,14 @@ router.delete(
   authorizeUser("admin"),
   courseController.delete
 );
-router.get(
-  "/faculty/:faculty/:semester",
+router.get("/faculty/:faculty/:semester", courseController.getBySemester);
+router.get("/faculty/:faculty", courseController.getByFaculty);
+router.get("/enroll/:slug", authenticateUser, courseController.enrollCourse);
+router.post(
+  "/enroll/:slug",
   authenticateUser,
-  courseController.getBySemester
+  courseController.handleEnrolment
 );
-router.get(
-  "/faculty/:faculty",
-  authenticateUser,
-  courseController.getByFaculty
-);
-// router.get(
-//   "/getBySemester/:semester",
-//   authenticateUser,
-//   courseController.getBySemester
-// );
 router.get("/:slug", authenticateUser, courseController.getCourse);
-router.get("/", authenticateUser, courseController.get);
+router.get("/", courseController.get);
 module.exports = router;

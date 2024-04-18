@@ -10,15 +10,15 @@
     <% if (typeof err === 'undefined') err = {};%>
     <% if (typeof course === 'undefined') course = {};%>
 <body>
-    <div class="container bg-white border-top border-4 border-success">
+    <div class="app container bg-white border-top border-4 border-success">
         <%- include('../../partials/header') %>
         <div class="d-flex flex-column justify-content-center mx-5 p-4" style="background-color: #e9e9e9;">
             <h2 class="text-center">Edit course</h2>
-            <form method="post" action="/courses/edit/<%= course._id %>?_method=put">
+            <form method="post" action="/courses/edit/<%= course._id %>">
                 <div class="form-group my-2 row">
                     <div class="col-md-6">
                         <label for="c_id" class="form-label fw-semibold">Course id</label>
-                        <input type="text" class="form-control" name="c_id" value="<%= course.c_id %>">
+                        <input type="text" class="form-control" name="c_id" value="<%= course.c_id %>" disabled>
                         <div class="err-message text-danger fst-italic"><%= err.c_id %></div>
                     </div>
                     <div class="col-md-6">
@@ -33,26 +33,26 @@
                 </div>
                 <div class="form-group my-2 row">
                     <div class="col-md-6">
-                        <label for="name_en" class="form-label fw-semibold">Course Name in English</label>
-                        <input type="text" class="form-control" name="name_en" value="<%= course.name_en %>">
-                        <div class="err-message text-danger fst-italic"><%= err.name_en %></div>
+                        <label for="name[]" class="form-label fw-semibold">Course Name in English</label>
+                        <input type="text" class="form-control" name="name[]" value="<%= course.name[0]%>">
+                        <div class="err-message text-danger fst-italic"><%= err.name %></div>
                     </div>
                     <div class="col-md-6">
-                        <label for="name_vn" class="form-label fw-semibold">Course Name in Vietnamese</label>
-                        <input type="text" class="form-control" name="name_vn" value="<%= course.name_vn %>">
-                        <div class="err-message text-danger fst-italic"><%= err.name_vn %></div>
+                        <label for="name[]" class="form-label fw-semibold">Course Name in Vietnamese</label>
+                        <input type="text" class="form-control" name="name[]" value="<%= course.name[1] %>">
+                        <div class="err-message text-danger fst-italic"><%= err.name %></div>
                     </div>
                 </div>
                 <div class="form-group my-2 row">
                     <div class="col-md-6">
-                        <label for="semester_en" class="form-label fw-semibold">Semester in English</label>
-                        <input type="text" class="form-control" name="semester_en" value="<%= course.semester_en %>">
-                        <div class="err-message text-danger fst-italic"><%= err.semester_en %></div>
+                        <label for="semester[]" class="form-label fw-semibold">Semester in English</label>
+                        <input type="text" class="form-control" name="semester[]" value="<%= course.semester[0] %>">
+                        <div class="err-message text-danger fst-italic"><%= err.semester %></div>
                     </div>
                     <div class="col-md-6">
-                        <label for="semester_vn" class="form-label fw-semibold">Semester in Vietnamese</label>
-                        <input type="text" class="form-control" name="semester_vn" value="<%= course.semester_vn %>">
-                        <div class="err-message text-danger fst-italic"><%= err.semester_vn %></div>
+                        <label for="semester[]" class="form-label fw-semibold">Semester in Vietnamese</label>
+                        <input type="text" class="form-control" name="semester[]" value="<%= course.semester[1] %>">
+                        <div class="err-message text-danger fst-italic"><%= err.semester %></div>
                     </div>
                 </div>
                 <div class="form-group my-2">
@@ -71,7 +71,7 @@
                     <div class="err-message text-danger fst-italic"></div>
                 </div>
                 <div class="d-flex flex-row justify-content-between mt-4">
-                    <button class="btn btn-primary col-5 ms-5" type="submit" name="formType" value="edit">Edit course</button>
+                    <button class="btn btn-primary col-5 ms-5" type="submit" name="formType" value="edit">Save</button>
                     <button class="btn btn-secondary col-5 me-5" type="submit" name="formType" value="cancel">Cancel</button>
                 </div>
 

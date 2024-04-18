@@ -6,15 +6,18 @@
   <% if(typeof err === 'undefined') err = {} %> <% if(typeof user ===
   'undefined') user = {} %> <% if(typeof users === 'undefined') users = {} %>
   <body>
-    <div class="container bg-white border-top border-4 border-success">
+    <div class="app container bg-white border-top border-4 border-success">
       <%- include('../partials/header') %> <% if(users.length > 0) { %>
-      <h3>All <%= users[0].role %>s</h3>
-      <ul class="list-group list-group-flush my-3">
-        <% for(let i = 0; i < users.length; i++) { %>
-        <li class="list-group-item">
-          <a class="text-decoration-none" href="#"><%= users[i].username %> </a>
-        </li>
-        <% }} else { %>
+        <div class="mx-4">
+          <h3>All <%= users[0].role %>s</h3>
+          <ul class="list-group list-group-flush my-3">
+          <% for(let i = 0; i < users.length; i++) { %>
+            <li class="list-group-item">
+              <a class="text-decoration-none" href="#"><%= users[i].username %> </a>
+            </li>
+          <% } %>
+        </div>
+        <% } else { %>
         <h3 class="text-center">No users here!</h3>
         <% } %>
       </ul>

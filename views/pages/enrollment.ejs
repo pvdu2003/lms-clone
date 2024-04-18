@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Enroll course</title>
+    <%- include('../partials/main') %>
+  </head>
+  <% if(typeof user === 'undefined') user = {} %> <% if(typeof err ===
+  'undefined') err = {} %>
+  <body>
+    <div class="app container bg-white border-top border-4 border-success">
+      <%- include('../partials/header') %>
+      <div class="mx-4">
+        <h1 class="my-4 py-4 border-bottom fw-bold">
+          <%= course.c_id %>[<%= course.faculty %>] <%= course.name[1] %> - <%=
+          course.name[0] %>
+        </h1>
+        <h2 class="my-3 py-3 fw-bold">Enrolment Options</h2>
+        <h4 class="my-2 fw-bold">
+          <%= course.c_id %>[<%= course.faculty %>] <%= course.name[1] %> - <%=
+          course.name[0] %>
+        </h4>
+        <p><%= course.description %></p>
+        <% if (course.teacher_name.length !== 0) { %>
+        <p class="pb-5 border-bottom">Teacher: <%= course.teacher_name %></p>
+        <% } %>
+        <h3 class="my-3 py-3 fw-bold border-bottom">
+          Self Enrolment (Student)
+        </h3>
+        <form action="/courses/enroll/<%= course.slug %>" method="post">
+          <input type="hidden" name="slug" value="<%= course.slug %>" />
+          <input type="hidden" name="semester" value="<%= course.semester %>" />
+
+          <label for="code" class="form-label fw-semibold">Enrolment key</label>
+          <input
+            type="text"
+            class="form-control"
+            name="code"
+            placeholder="Enter course's code"
+          />
+          <div class="err-message text-danger fst-italic"><%= err.code %></div>
+          <button
+            class="btn btn-success my-3"
+            type="submit"
+            name="formType"
+            value="enroll"
+          >
+            Enroll me
+          </button>
+        </form>
+        <div class="py-4"></div>
+      </div>
+    </div>
+  </body>
+</html>

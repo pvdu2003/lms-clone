@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Change Password</title>
+    <%- include('../partials/main') %>
+  </head>
+  <% if (typeof err === 'undefined') err = {}; %>
+  <body>
+    <div
+      class="d-flex align-items-center justify-content-center"
+      style="min-height: 90vh"
+    >
+      <div class="mt-0 p-4" style="background-color: #e9e9e9; width: 600px">
+        <h2 class="text-center">Change password Form</h2>
+        <form method="post" action="/user/change-password">
+          <div class="form-group my-2">
+            <label for="oldPwd" class="form-label fw-semibold"
+              >Old Password</label
+            >
+            <input
+              type="password"
+              class="form-control"
+              name="oldPwd"
+              placeholder="Enter your current password"
+            />
+            <div class="err-message text-danger fst-italic">
+              <%= err.oldPwd %>
+            </div>
+          </div>
+          <div class="form-group my-2">
+            <label for="newPwd" class="form-label fw-semibold"
+              >New Password</label
+            >
+            <input
+              type="password"
+              class="form-control"
+              name="newPwd"
+              placeholder="Enter new password"
+            />
+            <div class="err-message text-danger fst-italic">
+              <%= err.newPwd %>
+            </div>
+          </div>
+          <div class="form-group my-2">
+            <label for="confirmPwd" class="form-label fw-semibold"
+              >Confirm new password</label
+            >
+            <input
+              type="password"
+              class="form-control"
+              name="confirmPwd"
+              placeholder="Enter your new password again"
+            />
+            <div class="err-message text-danger fst-italic">
+              <%= err.confirmPwd %>
+            </div>
+          </div>
+          <div class="d-grid gap-2 my-4">
+            <button class="btn btn-primary" type="submit">
+              Change password
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
