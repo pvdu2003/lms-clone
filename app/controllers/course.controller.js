@@ -1,3 +1,4 @@
+const CourseDetail = require("../models/CourseDetail");
 const Courses = require("../models/Courses");
 const Enrollment = require("../models/Enrollment");
 class CourseController {
@@ -62,6 +63,48 @@ class CourseController {
         // res.json(course);
       })
       .catch(next);
+  }
+  // GET /courses/:slug/create-topic
+  async createNewTopic(req, res, next) {
+    let user = req.cookies.user;
+    let slug = req.params.slug;
+    res.render("pages/course/createTopic", { slug, user });
+  }
+
+  async uploadFile(req, res, next) {
+    // const { slug } = req.params;
+    // let user = req.cookies.user
+    // const file = req.file;
+    // await CourseDetail.findOne({ slug })
+    //   .then((courseDetail) => {
+    //     if (courseDetail) {
+    //       // Find the topic by topicSlug
+    //       const topic = courseDetail.topics.find((t) => t.slug === topic);
+    //       if (topic) {
+    //         // Create a new file instance
+    //         const newFile = {
+    //           title: file.originalname,
+    //           description: req.body.description,
+    //           url: file.path,
+    //         };
+    //         // Add the new file to the topic's files array
+    //         topic.files.push(newFile);
+    //         return courseDetail.save();
+    //       } else {
+    //         res.status(404).json({ error: "Topic not found" });
+    //       }
+    //     } else {
+    //       res.status(404).json({ error: "Course detail not found" });
+    //     }
+    //   })
+    //   .then((updatedCourseDetail) => {
+    //     if (updatedCourseDetail) {
+    //       res.status(200).json(updatedCourseDetail);
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     res.status(500).json({ error: "Internal server error" });
+    //   });
   }
   // GET /courses/create
   renderCreateForm(req, res, next) {

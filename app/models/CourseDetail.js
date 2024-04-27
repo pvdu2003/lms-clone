@@ -36,18 +36,15 @@ const topicSchema = new Schema({
   title: {
     type: String,
     required: true,
-  },
-  description: {
-    type: String,
-    required: true,
+    default: "Topic 1",
   },
   assignments: [assignmentSchema],
   files: [fileSchema],
 });
 
 const courseDetailSchema = new Schema({
-  courseId: {
-    type: objectId,
+  slug: {
+    type: String,
     ref: "Courses",
     required: true,
   },
@@ -57,10 +54,6 @@ const courseDetailSchema = new Schema({
   },
   duration: {
     type: Number,
-    required: true,
-  },
-  instructor: {
-    type: String,
     required: true,
   },
   topics: [topicSchema],

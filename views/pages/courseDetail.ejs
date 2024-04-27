@@ -30,7 +30,8 @@
 
       <div class="d-flex mx-4 mt-3 mb-5 flex-column">
         <% if(user.role !== "student" ) { %>
-        <div class="form-check form-switch form-check-reverse">
+        <a href="/courses/<%= course.slug %>/create-topic">Create new Topic</a>
+        <!-- <div class="form-check form-switch form-check-reverse">
           <input
             class="form-check-input"
             type="checkbox"
@@ -39,7 +40,7 @@
           <label class="form-check-label" for="flexSwitchCheckReverse"
             >Open edit mode</label
           >
-        </div>
+        </div> -->
         <%} %>
         <h4><%= course.name[0] %></h4>
       </div>
