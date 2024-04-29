@@ -1,13 +1,12 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const objectId = mongoose.Schema.Types.ObjectId;
 
 const fileSchema = new Schema({
-  title: {
+  f_title: {
     type: String,
     required: true,
   },
-  description: {
+  f_description: {
     type: String,
     required: true,
   },
@@ -17,28 +16,11 @@ const fileSchema = new Schema({
   },
 });
 
-const assignmentSchema = new Schema({
-  title: {
-    type: String,
-    required: true,
-  },
-  description: {
-    type: String,
-    required: true,
-  },
-  dueDate: {
-    type: Date,
-    required: true,
-  },
-});
-
 const topicSchema = new Schema({
-  title: {
+  t_title: {
     type: String,
     required: true,
-    default: "Topic 1",
   },
-  assignments: [assignmentSchema],
   files: [fileSchema],
 });
 
@@ -48,15 +30,14 @@ const courseDetailSchema = new Schema({
     ref: "Courses",
     required: true,
   },
-  description: {
-    type: String,
-    required: true,
+  topics: {
+    type: [topicSchema],
+    default: [
+      { t_title: "Topic 1", files: [] },
+      { t_title: "Topic 2", files: [] },
+      { t_title: "Topic 3", files: [] },
+    ],
   },
-  duration: {
-    type: Number,
-    required: true,
-  },
-  topics: [topicSchema],
 });
 
 const CourseDetail = mongoose.model("course_detail", courseDetailSchema);

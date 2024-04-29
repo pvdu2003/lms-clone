@@ -1,10 +1,9 @@
 const mongoose = require("mongoose");
 const slug = require("mongoose-slug-updater");
 const Schema = mongoose.Schema;
-const objectId = mongoose.Schema.Types.ObjectId;
 const CourseSchema = new Schema(
   {
-    _id: { type: objectId, auto: true },
+    _id: { type: Schema.Types.ObjectId, auto: true },
     c_id: { type: String, required: true },
     faculty: { type: String, required: true },
     name: [{ type: String, required: true }],

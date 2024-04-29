@@ -31,7 +31,7 @@
       <div class="d-flex mx-4 mt-3 mb-5 flex-column">
         <% if(user.role !== "student" ) { %>
         <a href="/courses/<%= course.slug %>/create-topic">Create new Topic</a>
-        <!-- <div class="form-check form-switch form-check-reverse">
+        <div class="form-check form-switch form-check-reverse">
           <input
             class="form-check-input"
             type="checkbox"
@@ -40,9 +40,35 @@
           <label class="form-check-label" for="flexSwitchCheckReverse"
             >Open edit mode</label
           >
-        </div> -->
+        </div>
         <%} %>
         <h4><%= course.name[0] %></h4>
+        <% course_detail.topics.map((t, index) => { %>
+        <button
+          class="btn"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#topic<%= index %>"
+          aria-expanded="false"
+          aria-controls="topic<%= index %>"
+        >
+          <div class="d-flex align-items-center">
+            <i class="fa-solid fa-caret-down"></i>
+            <h4 class="text-start ms-2"><%= t.t_title %></h4>
+          </div>
+          <div class="border-bottom"></div>
+        </button>
+
+        <div class="collapse" id="topic<%= index %>">
+          <% t.files.map((f) => { %>
+          <div class="border-0 border-bottom py-2 mx-4">
+            <h5><%= f.f_title %></h5>
+          </div>
+
+          <% }) %>
+        </div>
+
+        <% }) %>
       </div>
       <%- include('../partials/footer') %>
     </div>

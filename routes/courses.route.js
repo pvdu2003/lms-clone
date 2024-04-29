@@ -63,7 +63,7 @@ router.post(
   "/:slug/file",
   authenticateUser,
   authorizeUser("admin, teacher"),
-  upload.single("file"),
+  upload.single("topicFile"),
   courseController.uploadFile
 );
 router.get("/:slug", authenticateUser, courseController.getCourse);

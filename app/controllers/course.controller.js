@@ -56,10 +56,19 @@ class CourseController {
   // GET /courses/:slug
   async getCourse(req, res, next) {
     let user = req.cookies.user;
-    await Courses.findOne({ slug: req.params.slug })
-      .then((course) => {
+    let slug = req.params.slug;
+    await Courses.findOne({ slug })
+      .then(async (course) => {
+        const course_detail = await CourseDetail.findOne({ slug });
+        if (course_detail) {
+          console.log(course_detail.topics[0].t_title);
+          return res.render("pages/courseDetail", {
+            user,
+            course,
+            course_detail,
+          });
+        }
         // console.log(course.faculty);
-        res.render("pages/courseDetail", { user, course });
         // res.json(course);
       })
       .catch(next);
@@ -72,45 +81,138 @@ class CourseController {
   }
 
   async uploadFile(req, res, next) {
-    // const { slug } = req.params;
-    // let user = req.cookies.user
-    // const file = req.file;
-    // await CourseDetail.findOne({ slug })
-    //   .then((courseDetail) => {
-    //     if (courseDetail) {
-    //       // Find the topic by topicSlug
-    //       const topic = courseDetail.topics.find((t) => t.slug === topic);
-    //       if (topic) {
-    //         // Create a new file instance
-    //         const newFile = {
-    //           title: file.originalname,
-    //           description: req.body.description,
-    //           url: file.path,
-    //         };
-    //         // Add the new file to the topic's files array
-    //         topic.files.push(newFile);
-    //         return courseDetail.save();
-    //       } else {
-    //         res.status(404).json({ error: "Topic not found" });
-    //       }
-    //     } else {
-    //       res.status(404).json({ error: "Course detail not found" });
-    //     }
-    //   })
-    //   .then((updatedCourseDetail) => {
-    //     if (updatedCourseDetail) {
-    //       res.status(200).json(updatedCourseDetail);
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     res.status(500).json({ error: "Internal server error" });
-    //   });
+    const { slug } = req.params;
+    const { topic, title, description } = req.body;
+    let user = req.cookies.user;
+    const file = req.file;
+
+    try {
+      let courseDetail = await CourseDetail.findOne({ slug });
+
+      if (!courseDetail) {
+        // Create new CourseDetail if not found
+        courseDetail = new CourseDetail({ slug });
+      }
+
+      const topicExists = courseDetail.topics.some((t) => t.t_title === topic);
+
+      if (topicExists) {
+        // Update existing topic
+        const existingTopic = courseDetail.topics.find(
+          (t) => t.t_title === topic
+        );
+        const fileExists = existingTopic.files.some((f) => f.f_title === title);
+
+        if (fileExists) {
+          return res.status(400).json({ error: "File already exists." });
+        }
+        const newFile = {
+          f_title: title,
+          f_description: description,
+          url: file.path,
+        };
+
+        existingTopic.files.push(newFile);
+      } else {
+        // Create new topic
+        const newTopic = {
+          t_title: topic,
+          assignments: [],
+          files: [
+            {
+              f_title: title,
+              f_description: description,
+              url: file.path,
+            },
+          ],
+        };
+
+        courseDetail.topics.push(newTopic);
+      }
+
+      const updatedCourseDetail = await courseDetail.save();
+      res.status(200).redirect("/courses/" + slug);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: "Internal server error" });
+    }
   }
   // GET /courses/create
   renderCreateForm(req, res, next) {
     res.render("pages/admin/create", { user: req.cookies.user });
   }
   // POST /courses/create
+  // async create(req, res, next) {
+  //   const {
+  //     c_id,
+  //     faculty,
+  //     name_en,
+  //     name_vn,
+  //     semester_en,
+  //     semester_vn,
+  //     description,
+  //     teacher,
+  //     image,
+  //   } = req.body;
+  //   let err = {};
+  //   let formType = req.body.formType;
+  //   if (formType === "cancel") {
+  //     return res.redirect("/home");
+  //   }
+  //   if (formType === "create") {
+  //     if (c_id === "" || c_id === undefined) {
+  //       err.c_id = "This courses id is required!";
+  //     }
+  //     if (name_en === "" || name_en === undefined) {
+  //       err.name_en = "This course name is required!";
+  //     }
+  //     if (name_vn === "" || name_vn === undefined) {
+  //       err.name_vn = "This course name is required!";
+  //     }
+  //     if (semester_en === "" || semester_en === undefined) {
+  //       err.semester_en = "This semester field is required!";
+  //     }
+  //     if (semester_vn === "" || semester_vn === undefined) {
+  //       err.semester_vn = "This semester field is required!";
+  //     }
+  //     // if (code === "" || code === undefined) {
+  //     //   err.code = "This code field is required!";
+  //     // }
+  //     if (Object.keys(err).length !== 0) {
+  //       return res
+  //         .status(400)
+  //         .render("pages/admin/create", { err: err, user: req.cookies.user });
+  //     }
+  //     await Courses.findOne({ c_id, faculty })
+  //       .then(async (existingCourse) => {
+  //         if (existingCourse) {
+  //           err.c_id = "This course has already existed!";
+  //         }
+  //         if (Object.keys(err).length > 0) {
+  //           return res.status(400).render("pages/admin/create", {
+  //             err: err,
+  //             user: req.cookies.user,
+  //           });
+  //         }
+  //         const newCourse = new Courses({
+  //           c_id: c_id,
+  //           faculty: faculty,
+  //           name: [name_en, name_vn],
+  //           semester: [semester_en, semester_vn],
+  //           description: description,
+  //           teacher_name: teacher,
+  //           image: image,
+  //         });
+  //         await newCourse
+  //           .save()
+  //           .then(() => {
+  //             return res.status(201).redirect("/home");
+  //           })
+  //           .catch(next);
+  //       })
+  //       .catch(next);
+  //   }
+  // }
   async create(req, res, next) {
     const {
       c_id,
@@ -130,7 +232,7 @@ class CourseController {
     }
     if (formType === "create") {
       if (c_id === "" || c_id === undefined) {
-        err.c_id = "This courses id is required!";
+        err.c_id = "This course id is required!";
       }
       if (name_en === "" || name_en === undefined) {
         err.name_en = "This course name is required!";
@@ -144,92 +246,129 @@ class CourseController {
       if (semester_vn === "" || semester_vn === undefined) {
         err.semester_vn = "This semester field is required!";
       }
-      // if (code === "" || code === undefined) {
-      //   err.code = "This code field is required!";
-      // }
       if (Object.keys(err).length !== 0) {
-        return res
-          .status(400)
-          .render("pages/admin/create", { err: err, user: req.cookies.user });
+        return res.status(400).render("pages/admin/create", {
+          err: err,
+          user: req.cookies.user,
+        });
       }
-      await Courses.findOne({ c_id, faculty })
-        .then(async (existingCourse) => {
-          if (existingCourse) {
-            err.c_id = "This course has already existed!";
-          }
-          if (Object.keys(err).length > 0) {
-            return res.status(400).render("pages/admin/create", {
-              err: err,
-              user: req.cookies.user,
-            });
-          }
-          const newCourse = new Courses({
-            c_id: c_id,
-            faculty: faculty,
-            name: [name_en, name_vn],
-            semester: [semester_en, semester_vn],
-            description: description,
-            teacher_name: teacher,
-            image: image,
+
+      try {
+        const existingCourse = await Courses.findOne({ c_id, faculty });
+        if (existingCourse) {
+          err.c_id = "This course already exists!";
+          return res.status(400).render("pages/admin/create", {
+            err: err,
+            user: req.cookies.user,
           });
-          await newCourse
-            .save()
-            .then(() => {
-              return res.status(201).redirect("/home");
-            })
-            .catch(next);
-        })
-        .catch(next);
+        }
+
+        const newCourse = new Courses({
+          c_id: c_id,
+          faculty: faculty,
+          name: [name_en, name_vn],
+          semester: [semester_en, semester_vn],
+          description: description,
+          teacher_name: teacher,
+          image: image,
+        });
+
+        const savedCourse = await newCourse.save();
+
+        const courseDetail = new CourseDetail({
+          slug: savedCourse.slug,
+        });
+
+        await courseDetail.save();
+
+        savedCourse.courseDetail = courseDetail._id;
+        await savedCourse.save();
+
+        return res.status(201).redirect("/home");
+      } catch (error) {
+        next(error);
+      }
     }
   }
   // GET /courses/enroll/:slug
   async enrollCourse(req, res, next) {
-    let user = req.cookies.user;
-    let slug = req.params.slug;
     try {
-      const enrollment = await Enrollment.findOne({ u_id: user._id, slug });
-      if (enrollment) {
-        return res.redirect(`/courses/${slug}`);
-      } else {
-        const course = await Courses.findOne({ slug });
-        // return res.json(course);
-        return res.render("pages/enrollment", { user, course });
+      const user = req.cookies.user;
+      const slug = req.params.slug;
+
+      let enrollment = await Enrollment.findOne({ u_id: user._id });
+
+      if (!enrollment) {
+        // Create a new enrollment record if it doesn't exist
+        enrollment = new Enrollment({ u_id: user._id, enrolledCourses: [] });
       }
-    } catch (e) {
-      console.log(e);
+
+      const isEnrolled = enrollment.enrolledCourses.some(
+        (course) => course.slug === slug
+      );
+
+      if (isEnrolled) {
+        // User is already enrolled in the course
+        return res.redirect(`/courses/${slug}`);
+      }
+
+      const course = await Courses.findOne({ slug });
+      if (!course) {
+        // Course not found
+        return res.status(404).send("Course not found");
+      }
+
+      const newEnrollment = {
+        slug: course.slug,
+        semester: course.semester,
+      };
+
+      enrollment.enrolledCourses.push(newEnrollment);
+      await enrollment.save();
+
+      return res.render("pages/enrollment", { user, course });
+    } catch (error) {
+      next(error);
     }
   }
   // POST /courses/enroll/:slug
   async handleEnrolment(req, res, next) {
-    let { slug, semester, code } = req.body;
-    let user = req.cookies.user;
-    let err = {};
-    // res.json(req.body);
-    await Courses.findOne({ slug, code })
-      .then(async (match) => {
-        if (match) {
-          const enrolment = new Enrollment({
-            u_id: user._id,
-            slug,
-            semester,
-          });
-          await enrolment
-            .save()
-            .then(() => {
-              return res.status(201).redirect("/home");
-            })
-            .catch(next);
-        } else {
-          const course = await Courses.findOne({ slug });
-          err.code = "Enrolment key is not correct! Try again!";
-          return res.render("pages/enrollment", { user, err, course });
-          // res.send("Something wrongs");
-        }
-        // res.json(match);
+    try {
+      const { slug, semester, code } = req.body;
+      const user = req.cookies.user;
+      const err = {};
 
-        // res.send("Match with code");
-      })
-      .catch(next);
+      const course = await Courses.findOne({ slug, code });
+      if (!course) {
+        err.code = "Enrollment key is not correct! Try again!";
+        return res.render("pages/enrollment", { user, err, course });
+      }
+
+      const enrollment = await Enrollment.findOne({ u_id: user._id });
+      if (enrollment) {
+        const isEnrolled = enrollment.enrolledCourses.some(
+          (course) => course.slug === slug
+        );
+
+        if (isEnrolled) {
+          // User is already enrolled in the course
+          return res.redirect("/home");
+        }
+
+        enrollment.enrolledCourses.push({ slug, semester });
+        await enrollment.save();
+      } else {
+        const newEnrollment = new Enrollment({
+          u_id: user._id,
+          enrolledCourses: [{ slug, semester }],
+        });
+        await newEnrollment.save();
+      }
+
+      return res.status(201).redirect("/home");
+    } catch (error) {
+      next(error);
+    }
   }
   // get /courses/edit/:id
   async renderEditForm(req, res, next) {
