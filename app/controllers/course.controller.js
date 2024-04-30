@@ -1,6 +1,9 @@
 const CourseDetail = require("../models/CourseDetail");
 const Courses = require("../models/Courses");
 const Enrollment = require("../models/Enrollment");
+const User = require("../models/User");
+const path = require("path");
+
 class CourseController {
   // GET /courses
   get(req, res, next) {
@@ -61,15 +64,12 @@ class CourseController {
       .then(async (course) => {
         const course_detail = await CourseDetail.findOne({ slug });
         if (course_detail) {
-          console.log(course_detail.topics[0].t_title);
           return res.render("pages/courseDetail", {
             user,
             course,
             course_detail,
           });
         }
-        // console.log(course.faculty);
-        // res.json(course);
       })
       .catch(next);
   }
@@ -80,6 +80,7 @@ class CourseController {
     res.render("pages/course/createTopic", { slug, user });
   }
 
+  // POST /:slug/file
   async uploadFile(req, res, next) {
     const { slug } = req.params;
     const { topic, title, description } = req.body;
@@ -130,89 +131,41 @@ class CourseController {
         courseDetail.topics.push(newTopic);
       }
 
-      const updatedCourseDetail = await courseDetail.save();
+      await courseDetail.save();
       res.status(200).redirect("/courses/" + slug);
     } catch (error) {
       console.log(error);
       res.status(500).json({ error: "Internal server error" });
     }
   }
-  // GET /courses/create
-  renderCreateForm(req, res, next) {
-    res.render("pages/admin/create", { user: req.cookies.user });
+
+  async viewFile(req, res) {
+    const { slug, topicIndex, fileIndex } = req.params;
+    try {
+      const courseDetail = await CourseDetail.findOne({ slug });
+
+      if (!courseDetail) {
+        return res.status(404).json({ error: "Course not found" });
+      }
+
+      const topic = courseDetail.topics[topicIndex];
+      const file = topic.files[fileIndex];
+
+      const filePath = path.resolve(file.url);
+      res.sendFile(filePath); // Sends the file to be displayed in the browser
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: "Internal server error" });
+    }
   }
+  // GET /courses/create
+  async renderCreateForm(req, res, next) {
+    const teachers = await User.find({ role: "teacher" });
+    console.log(teachers[0]);
+    res.render("pages/admin/create", { user: req.cookies.user, teachers });
+  }
+
   // POST /courses/create
-  // async create(req, res, next) {
-  //   const {
-  //     c_id,
-  //     faculty,
-  //     name_en,
-  //     name_vn,
-  //     semester_en,
-  //     semester_vn,
-  //     description,
-  //     teacher,
-  //     image,
-  //   } = req.body;
-  //   let err = {};
-  //   let formType = req.body.formType;
-  //   if (formType === "cancel") {
-  //     return res.redirect("/home");
-  //   }
-  //   if (formType === "create") {
-  //     if (c_id === "" || c_id === undefined) {
-  //       err.c_id = "This courses id is required!";
-  //     }
-  //     if (name_en === "" || name_en === undefined) {
-  //       err.name_en = "This course name is required!";
-  //     }
-  //     if (name_vn === "" || name_vn === undefined) {
-  //       err.name_vn = "This course name is required!";
-  //     }
-  //     if (semester_en === "" || semester_en === undefined) {
-  //       err.semester_en = "This semester field is required!";
-  //     }
-  //     if (semester_vn === "" || semester_vn === undefined) {
-  //       err.semester_vn = "This semester field is required!";
-  //     }
-  //     // if (code === "" || code === undefined) {
-  //     //   err.code = "This code field is required!";
-  //     // }
-  //     if (Object.keys(err).length !== 0) {
-  //       return res
-  //         .status(400)
-  //         .render("pages/admin/create", { err: err, user: req.cookies.user });
-  //     }
-  //     await Courses.findOne({ c_id, faculty })
-  //       .then(async (existingCourse) => {
-  //         if (existingCourse) {
-  //           err.c_id = "This course has already existed!";
-  //         }
-  //         if (Object.keys(err).length > 0) {
-  //           return res.status(400).render("pages/admin/create", {
-  //             err: err,
-  //             user: req.cookies.user,
-  //           });
-  //         }
-  //         const newCourse = new Courses({
-  //           c_id: c_id,
-  //           faculty: faculty,
-  //           name: [name_en, name_vn],
-  //           semester: [semester_en, semester_vn],
-  //           description: description,
-  //           teacher_name: teacher,
-  //           image: image,
-  //         });
-  //         await newCourse
-  //           .save()
-  //           .then(() => {
-  //             return res.status(201).redirect("/home");
-  //           })
-  //           .catch(next);
-  //       })
-  //       .catch(next);
-  //   }
-  // }
   async create(req, res, next) {
     const {
       c_id,
@@ -379,15 +332,7 @@ class CourseController {
       })
       .catch(next);
   }
-  // POST /courses/edit/:id
-  // async renderEditForm(req, res, next) {
-  //   let user = req.cookies.user;
-  //   await Courses.findById(req.body.courseId)
-  //     .then((course) => {
-  //       res.render("pages/admin/edit", { user, course });
-  //     })
-  //     .catch(next);
-  // }
+
   // POST /courses/edit/:id
   async edit(req, res, next) {
     let err = {};
@@ -406,7 +351,6 @@ class CourseController {
     }
     await Courses.findByIdAndUpdate({ _id: req.params.id }, req.body)
       .then(() => res.redirect("/courses/"))
-      // .then(() => res.send("update"))
       .catch(next);
   }
   // DELETE courses/:id

@@ -3,24 +3,6 @@
   <head>
     <title>Course Categories</title>
     <%- include('../partials/main') %>
-    <script>
-      window.addEventListener("load", init);
-      function init() {
-        const switchCheckbox = document.getElementById(
-          "flexSwitchCheckReverse"
-        );
-
-        switchCheckbox.addEventListener("change", function () {
-          if (this.checked) {
-            console.log("Switch is on");
-            // Perform actions when switch is on
-          } else {
-            console.log("Switch is off");
-            // Perform actions when switch is off
-          }
-        });
-      }
-    </script>
   </head>
   <% if(typeof user === 'undefined') user = {} %> <% if(typeof course ===
   'undefined') course = {} %>
@@ -31,21 +13,12 @@
       <div class="d-flex mx-4 mt-3 mb-5 flex-column">
         <% if(user.role !== "student" ) { %>
         <a href="/courses/<%= course.slug %>/create-topic">Create new Topic</a>
-        <div class="form-check form-switch form-check-reverse">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            id="flexSwitchCheckReverse"
-          />
-          <label class="form-check-label" for="flexSwitchCheckReverse"
-            >Open edit mode</label
-          >
-        </div>
+
         <%} %>
         <h4><%= course.name[0] %></h4>
         <% course_detail.topics.map((t, index) => { %>
         <button
-          class="btn"
+          class="btn mt-4"
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#topic<%= index %>"
@@ -60,9 +33,19 @@
         </button>
 
         <div class="collapse" id="topic<%= index %>">
-          <% t.files.map((f) => { %>
+          <% t.files.map((f, fileIndex) => { %>
           <div class="border-0 border-bottom py-2 mx-4">
-            <h5><%= f.f_title %></h5>
+            <a
+              class="text-decoration-none text-dark"
+              href="/courses/view/<%= course.slug %>/<%= index %>/<%= fileIndex %>"
+              ><h5><%= f.f_title %></h5>
+              <p
+                class="d-inline-block text-truncate mb-0"
+                style="max-width: 500px"
+              >
+                <%= f.f_description %>
+              </p></a
+            >
           </div>
 
           <% }) %>

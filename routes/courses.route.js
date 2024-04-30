@@ -53,6 +53,7 @@ router.post(
   authenticateUser,
   courseController.handleEnrolment
 );
+router.get("/view/:slug/:topicIndex/:fileIndex", courseController.viewFile);
 router.get(
   "/:slug/create-topic",
   authenticateUser,
