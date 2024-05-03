@@ -1,3 +1,4 @@
+const { log } = require("console");
 const CourseDetail = require("../models/CourseDetail");
 const Courses = require("../models/Courses");
 const Enrollment = require("../models/Enrollment");
@@ -60,6 +61,7 @@ class CourseController {
   async getCourse(req, res, next) {
     let user = req.cookies.user;
     let slug = req.params.slug;
+    let edit = req.query.edit;
     await Courses.findOne({ slug })
       .then(async (course) => {
         const course_detail = await CourseDetail.findOne({ slug });
@@ -68,6 +70,8 @@ class CourseController {
             user,
             course,
             course_detail,
+            edit,
+            slug,
           });
         }
       })

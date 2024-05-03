@@ -9,8 +9,7 @@ const storage = multer.diskStorage({
     cb(null, "uploads/courseDetail"); // Specify the destination folder for uploaded files
   },
   filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, uniqueSuffix + "-" + file.originalname); // Set the file name to be unique
+    cb(null, file.originalname);
   },
 });
 
