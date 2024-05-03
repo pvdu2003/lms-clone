@@ -28,7 +28,7 @@
         <h3 class="my-3 py-3 fw-bold border-bottom">
           Self Enrolment (Student)
         </h3>
-        <form action="/courses/enroll/<%= course.slug %>" method="post">
+        <form action="/course/<%= course.slug %>/enroll" method="post">
           <input type="hidden" name="slug" value="<%= course.slug %>" />
           <input type="hidden" name="semester" value="<%= course.semester %>" />
 
