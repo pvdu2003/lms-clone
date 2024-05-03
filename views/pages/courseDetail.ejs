@@ -55,7 +55,7 @@
             >
               <a
                 class="text-decoration-none text-dark"
-                href="/courses/<%= course.slug %>/view/<%= index %>/<%= fileIndex %>"
+                href="/course/<%= course.slug %>/view/<%= index %>/<%= fileIndex %>"
                 ><h5><%= f.f_title %></h5>
                 <p
                   class="d-inline-block text-truncate mb-0"
@@ -75,7 +75,7 @@
             <div class="p-4">
               <form
                 method="post"
-                action="/courses/<%= slug %>/file"
+                action="/course/<%= slug %>/file"
                 enctype="multipart/form-data"
               >
                 <div class="row mb-3">
@@ -154,7 +154,7 @@
           <h5 class="mb-3">Add new topic</h5>
           <form
             method="post"
-            action="/courses/<%= slug %>/file"
+            action="/course/<%= slug %>/file"
             enctype="multipart/form-data"
           >
             <div class="row mb-3">
@@ -242,7 +242,7 @@
           <div class="border-0 border-bottom py-2 mx-4">
             <a
               class="text-decoration-none text-dark"
-              href="/courses/view/<%= course.slug %>/<%= index %>/<%= fileIndex %>"
+              href="/course/<%= course.slug %>/view/<%= index %>/<%= fileIndex %>"
               ><h5><%= f.f_title %></h5>
               <p
                 class="d-inline-block text-truncate mb-0"

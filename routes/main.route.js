@@ -2,9 +2,9 @@ const coursesRouter = require("./courses.route");
 const homeRouter = require("./home.route");
 const userRouter = require("./user.route");
 const meRouter = require("./me.route");
-const detailRouter = require("./courseDetail.route");
+const detailRouter = require("./course.detail.route");
 function route(app) {
-  // app.use("/courses/:slug", detailRouter);
+  app.use("/course", detailRouter);
   app.use("/courses", coursesRouter);
   app.use("/user", userRouter);
   app.use("/me", meRouter);

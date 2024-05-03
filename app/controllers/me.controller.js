@@ -25,24 +25,26 @@ class MeController {
       .catch((error) => {
         next(error);
       });
-    // .then((enrollment) => {
-    //   const courseSlugs = enrollment.map((enrollment) => enrollment.slug);
-    //   return Courses.find({ slug: { $in: courseSlugs } });
-    // })
-    // .then((courses) => {
-    //   res.render("pages/myCourse", { user, courses });
-    // })
-    // .catch(next);
   }
   // GET /me/dashboard
   async getDashboard(req, res, next) {
     let user = req.cookies.user;
     await Enrollment.find({ u_id: user._id })
-      .then((enrollment) => {
-        const courseSlugs = enrollment.map((enrollment) => enrollment.slug);
-        return Courses.find({ slug: { $in: courseSlugs } });
+      .populate({
+        path: "enrolledCourses._id",
+        model: "courses",
+        select: "slug", // Select the specific fields you want to populate
       })
-      .then((courses) => {
+      .then(async (enrollments) => {
+        // console.log(enrollments);
+        const slugs = enrollments
+          .map((enrollment) =>
+            enrollment.enrolledCourses.map((course) => course.slug)
+          )
+          .flat();
+
+        const courses = await Courses.find({ slug: { $in: slugs } });
+
         res.render("pages/dashboard", { user, courses });
       })
       .catch(next);

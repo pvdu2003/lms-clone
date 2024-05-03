@@ -25,20 +25,13 @@
         <li class="d-flex list-group-item">
           <a
             class="col-10 text-decoration-none"
-            href="/courses/enroll/<%= courses[i].slug %>"
+            href="/course/<%= courses[i].slug %>/enroll"
           >
             <%= courses[i].c_id %>[<%= courses[i].faculty %>] <%=
             courses[i].name[0] %> - <%= courses[i].name[1] %>
           </a>
           <% if(user.role === 'admin') { %>
           <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-            <!-- <form action="/courses/edit/<%= courses[i]._id %>" method="post">
-              <input
-                type="hidden"
-                name="courseId"
-                value="<%= courses[i]._id %>"
-              />
-            </form> -->
             <button class="btn btn-primary me-md-2">
               <a
                 class="link-light text-decoration-none"
@@ -47,7 +40,6 @@
                 Edit
               </a>
             </button>
-            <!-- <button class="btn btn-danger" type="button">Delete</button> -->
             <button
               type="button"
               class="mx-2 btn btn-danger"

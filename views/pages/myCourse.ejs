@@ -15,7 +15,7 @@
         <% courses.forEach(course => { %>
         <div class="col text-center">
           <div class="card h-100">
-            <a href="/courses/<%= course.slug %>">
+            <a href="/course/<%= course.slug %>">
               <img
                 src="<%= course.image %>"
                 class="card-img-top w-100"
@@ -24,7 +24,7 @@
             </a>
             <div class="card-body text-truncate">
               <a
-                href="/courses/<%= course.slug %>"
+                href="/course/<%= course.slug %>"
                 class="card-title fw-semibold fs-5 text-decoration-none"
               >
                 <%= course.c_id %>[<%= course.faculty %>] <%= course.name[1] %>
