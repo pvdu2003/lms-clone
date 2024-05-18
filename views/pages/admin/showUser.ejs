@@ -57,30 +57,27 @@
                   type="button"
                   class="mx-2 btn btn-danger"
                   data-bs-toggle="modal"
-                  data-bs-target="#deleteUser"
+                  data-bs-target="#delete<%= users[i].username %>"
                 >
                   Delete user
                 </button>
-                <form
-                  class="cancel-form"
-                  method="POST"
-                  action="/user/cancel-action"
+                <!-- <form
+                  action="/user/delete-user/<%= users[i]._id %>?_method=DELETE"
+                  method="post"
                 >
-                  <input
-                    type="hidden"
-                    name="userId"
-                    value="<%= users[i]._id %>"
-                  />
-                  <button type="submit" class="mx-2 btn btn-secondary">
-                    Cancel
+                  <button
+                    class="btn btn-danger text-decoration-none text-light"
+                    type="submit"
+                  >
+                    Delete user
                   </button>
-                </form>
+                </form> -->
               </div>
             </td>
             <!-- Modal -->
             <div
               class="modal fade"
-              id="deleteUser"
+              id="delete<%= users[i].username %>"
               tabindex="-1"
               aria-labelledby="exampleModalLabel"
               aria-hidden="true"
@@ -99,7 +96,7 @@
                     ></button>
                   </div>
                   <div class="modal-body">
-                    <p>Are you sure to update role of this user?</p>
+                    <p>Are you sure to delete user <%= users[i].username %>?</p>
                   </div>
                   <div class="modal-footer">
                     <button
@@ -110,16 +107,13 @@
                       Close
                     </button>
                     <form
-                      class="delete-form"
-                      method="POST"
-                      action="/user/update-role"
+                      action="/user/delete-user/<%= users[i]._id %>?_method=DELETE"
+                      method="post"
                     >
-                      <input
-                        type="hidden"
-                        name="userId"
-                        value="<%= users[i]._id %>"
-                      />
-                      <button type="submit" class="mx-2 btn btn-primary">
+                      <button
+                        class="btn btn-danger text-decoration-none text-light"
+                        type="submit"
+                      >
                         Delete user
                       </button>
                     </form>

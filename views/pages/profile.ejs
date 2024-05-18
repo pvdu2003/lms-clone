@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Courses</title>
+    <%- include('../partials/main') %>
+  </head>
+  <% if(typeof user === 'undefined') user = {} %>
+  <body>
+    <div class="app container bg-white border-top border-4 border-success">
+      <%- include('../partials/header') %>
+      <div class="mx-5 px-5">
+        <h3 class="text-center mt-3">User's Profile</h3>
+        <p>
+          Username:
+          <span class="text-success fw-medium fs-5"><%= usr.username %></span>
+        </p>
+        <p>
+          Name:
+          <span class="text-success fw-medium fs-5"><%= usr.name %></span>
+        </p>
+        <p>
+          Role:
+          <span class="text-success fw-medium fs-5"><%= usr.role %></span>
+        </p>
+        <p>
+          Created At:
+          <span class="text-success fw-medium fs-5"
+            ><%= usr.createdAt.toLocaleString() %></span
+          >
+        </p>
+      </div>
+      <%- include('../partials/footer') %>
+    </div>
+  </body>
+</html>

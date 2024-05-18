@@ -13,7 +13,7 @@
           <ul class="list-group list-group-flush my-3">
           <% for(let i = 0; i < users.length; i++) { %>
             <li class="list-group-item">
-              <a class="text-decoration-none" href="#"><%= users[i].username %> </a>
+              <a class="text-decoration-none" href="/user/profile/<%= users[i]._id %>"><%= users[i].username %> </a>
             </li>
           <% } %>
         </div>

@@ -10,7 +10,6 @@ router.get("/getTeachers", userController.getTeachers);
 router.get("/getStudents", userController.getStudents);
 router.get("/showUser", userController.showUser);
 router.post("/update-role", userController.updateRole);
-router.post("/delete-user", userController.deleteUser);
-router.post("/cancel-action", userController.cancelAction);
+router.delete("/delete-user/:id", userController.deleteUser);
 
 module.exports = router;
