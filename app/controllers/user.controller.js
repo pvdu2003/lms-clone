@@ -1,5 +1,6 @@
 const User = require("../models/User");
 const Enrollment = require("../models/Enrollment");
+const Courses = require("../models/Courses");
 const bcrypt = require("bcrypt");
 
 class userController {
@@ -62,23 +63,49 @@ class userController {
   // for admin to see all profiles
   // GET /user/profile/:id
   async userProfile(req, res, next) {
-    let user = req.cookies.user;
-    let id = req.params.id;
-    await User.findById(id)
-      .then((usr) => {
-        res.render("pages/profile", { user, usr });
-      })
-      .catch(next);
+    try {
+      const user = req.cookies.user;
+      const id = req.params.id;
+      const usr = await User.findById(id);
+      const enrollments = await Enrollment.find({ u_id: usr._id }).populate({
+        path: "enrolledCourses._id",
+        model: "courses",
+        select: "slug",
+      });
+
+      const slugs = enrollments.reduce((acc, enrollment) => {
+        acc.push(...enrollment.enrolledCourses.map((course) => course.slug));
+        return acc;
+      }, []);
+
+      const courses = await Courses.find({ slug: { $in: slugs } });
+      res.render("pages/profile", { usr, user, courses });
+    } catch (error) {
+      next(error);
+    }
   }
   // see user's profile only
   // GET user/profile
   async myProfile(req, res, next) {
-    let user = req.cookies.user;
-    await User.findById(user._id)
-      .then((usr) => {
-        res.render("pages/profile", { usr, user });
-      })
-      .catch(next);
+    try {
+      const user = req.cookies.user;
+      const usr = await User.findById(user._id);
+      const enrollments = await Enrollment.find({ u_id: usr._id }).populate({
+        path: "enrolledCourses._id",
+        model: "courses",
+        select: "slug",
+      });
+
+      const slugs = enrollments.reduce((acc, enrollment) => {
+        acc.push(...enrollment.enrolledCourses.map((course) => course.slug));
+        return acc;
+      }, []);
+
+      const courses = await Courses.find({ slug: { $in: slugs } });
+      res.render("pages/profile", { usr, user, courses });
+    } catch (error) {
+      next(error);
+    }
   }
   // GET /user/getTeachers
   async getTeachers(req, res, next) {
