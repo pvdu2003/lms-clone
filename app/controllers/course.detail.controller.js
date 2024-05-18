@@ -1,3 +1,4 @@
+const { log } = require("console");
 const CourseDetail = require("../models/CourseDetail");
 const Courses = require("../models/Courses");
 const Enrollment = require("../models/Enrollment");
@@ -186,6 +187,71 @@ class CourseDetailController {
     } catch (error) {
       console.log(error);
       res.status(500).json({ error: "Internal server error" });
+    }
+  }
+
+  // Put/Patch /course/:slug/topic/:index/update-file/:fileIndex
+  async updateFile(req, res, next) {
+    try {
+      const { slug, index, fileIndex } = req.params;
+      const { title, description } = req.body;
+      const topicFile = req.file;
+      console.log(topicFile);
+      // Find the course detail document
+      const courseDetail = await CourseDetail.findOne({ slug });
+
+      courseDetail.topics[index].files[fileIndex].f_title = title;
+      courseDetail.topics[index].files[fileIndex].f_description = description;
+
+      // If a new file was uploaded, update the URL
+      if (topicFile) {
+        // Here, you would need to handle the file upload, e.g., using a file storage service
+        // and update the 'url' field of the file accordingly
+        courseDetail.topics[index].files[fileIndex].url = topicFile.path;
+      }
+
+      // Save the updated course detail document
+      await courseDetail.save();
+
+      res.redirect(`/course/${slug}`);
+    } catch (error) {
+      console.error("Error updating file detail:", error);
+      res.status(500).send("Error updating file detail");
+    }
+  }
+  // DELETE /course/:slug/topic/:index/delete-file/:fileIndex
+  async deleteFile(req, res, next) {
+    try {
+      const { slug, index, fileIndex } = req.params;
+
+      const courseDetail = await CourseDetail.findOne({ slug });
+      courseDetail.topics[index].files.splice(fileIndex, 1);
+      await courseDetail.save();
+      res.redirect("/course/" + slug);
+    } catch (e) {
+      console.log(e);
+      res.status(500).send("Fails to delete file");
+    }
+  }
+  // DELETE /course/:slug/delete-topic/:index
+  async deleteTopic(req, res, next) {
+    try {
+      const { slug, index } = req.params;
+
+      // Find the course detail document
+      const courseDetail = await CourseDetail.findOne({ slug });
+
+      // Remove the topic from the course detail document
+      courseDetail.topics.splice(index, 1);
+
+      // Save the updated course detail document
+      await courseDetail.save();
+
+      // Redirect to the course page
+      res.redirect(`/course/${slug}`);
+    } catch (error) {
+      console.error("Error deleting topic:", error);
+      res.status(500).send("Error deleting topic");
     }
   }
 }

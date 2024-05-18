@@ -33,21 +33,33 @@
           class="d-flex flex-column bg-success border border-secondary"
           style="--bs-bg-opacity: 0.15"
         >
-          <button
-            class="btn mt-4"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#topic<%= index %>"
-            aria-expanded="false"
-            aria-controls="topic<%= index %>"
+          <div
+            class="d-flex flex-row justify-content-between align-items-center"
           >
-            <div class="d-flex align-items-center">
-              <i class="fa-solid fa-caret-down"></i>
-              <h4 class="text-start ms-2"><%= t.t_title %></h4>
+            <button
+              class="btn mt-3"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#topic<%= index %>"
+              aria-expanded="false"
+              aria-controls="topic<%= index %>"
+            >
+              <div class="d-flex flex-row align-items-center">
+                <i class="fa-solid fa-caret-down"></i>
+                <h4 class="text-start ms-2"><%= t.t_title %></h4>
+              </div>
+            </button>
+            <div class="d-flex justify-content-end me-4">
+              <button class="btn btn-success me-3" type="button">Update</button>
+              <form
+                method="post"
+                action="/course/<%= slug %>/delete-topic/<%= index %>?_method=DELETE"
+              >
+                <button class="btn btn-danger" type="submit">Delete</button>
+              </form>
             </div>
-            <div class="border-bottom"></div>
-          </button>
-
+          </div>
+          <div class="border-bottom"></div>
           <div class="collapse" id="topic<%= index %>">
             <% t.files.map((f, fileIndex) => { %>
             <div
@@ -64,10 +76,108 @@
                   <%= f.f_description %>
                 </p></a
               >
-              <div class="d-grid gap-2 d-md-block">
-                <button class="btn btn-success" type="button">Update</button>
-                <button class="btn btn-danger" type="button">Delete</button>
+              <div class="d-flex justify-content-end">
+                <button
+                  class="btn btn-success me-3"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#file<%=fileIndex %>"
+                  aria-expanded="false"
+                  aria-controls="file<%=fileIndex %>"
+                >
+                  Update
+                </button>
+                <form
+                  action="/course/<%= slug %>/topic/<%= index %>/delete-file/<%= fileIndex %>?_method=DELETE"
+                  method="post"
+                >
+                  <button class="btn btn-danger" type="submit">Delete</button>
+                </form>
               </div>
+            </div>
+            <!-- Update file here -->
+            <div class="collapse" id="file<%=fileIndex %>">
+              <form
+                class="p-4"
+                action="/course/<%= slug %>/topic/<%= index %>/update-file/<%= fileIndex %>"
+                method="post"
+                enctype="multipart/form-data"
+              >
+                <div class="row mb-3">
+                  <div class="col-sm-10">
+                    <input
+                      class="form-control"
+                      type="text"
+                      id="topic"
+                      name="topic"
+                      value="<%= t.t_title %>"
+                      hidden
+                    />
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label for="title" class="col-sm-2 col-form-label"
+                    >Title</label
+                  >
+                  <div class="col-sm-10">
+                    <input
+                      class="form-control"
+                      type="text"
+                      id="title"
+                      name="title"
+                      value="<%= f.f_title %>"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label for="description" class="col-sm-2 col-form-label"
+                    >Description</label
+                  >
+                  <div class="col-sm-10">
+                    <input
+                      class="form-control"
+                      type="text"
+                      id="description"
+                      name="description"
+                      value="<%= f.f_description %>"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label for="topicFile" class="col-sm-2 col-form-label"
+                    >File</label
+                  >
+                  <div class="col-sm-10">
+                    <input
+                      class="form-control"
+                      type="file"
+                      id="topicFile"
+                      name="topicFile"
+                    />
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-9 offset-sm-2">
+                    <input
+                      class="btn btn-success"
+                      type="submit"
+                      value="Update file"
+                    />
+                    <button
+                      class="btn btn-secondary"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#file<%=fileIndex %>"
+                      aria-expanded="true"
+                      aria-controls="file<%=fileIndex %>"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </form>
             </div>
 
             <% }) %>

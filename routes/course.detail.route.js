@@ -41,5 +41,15 @@ router.post(
   upload.single("topicFile"),
   courseDetailController.uploadFile
 );
+router.post(
+  "/:slug/topic/:index/update-file/:fileIndex",
+  upload.single("topicFile"),
+  courseDetailController.updateFile
+);
+router.delete(
+  "/:slug/topic/:index/delete-file/:fileIndex",
+  courseDetailController.deleteFile
+);
+router.delete("/:slug/delete-topic/:index", courseDetailController.deleteTopic);
 router.get("/:slug", authenticateUser, courseDetailController.getCourse);
 module.exports = router;
