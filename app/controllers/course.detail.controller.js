@@ -1,4 +1,3 @@
-const { log } = require("console");
 const CourseDetail = require("../models/CourseDetail");
 const Courses = require("../models/Courses");
 const Enrollment = require("../models/Enrollment");
@@ -25,7 +24,7 @@ class CourseDetailController {
       })
       .catch(next);
   }
-  // GET /courses/enroll/:slug
+  // GET /course/enroll/:slug
   async enrollCourse(req, res, next) {
     try {
       const user = req.cookies.user;
@@ -64,6 +63,30 @@ class CourseDetailController {
       return res.render("pages/enrollment", { user, course });
     } catch (error) {
       next(error);
+    }
+  }
+  // POST /course/:slug/leave
+  async leaveCourse(req, res, next) {
+    let slug = req.params.slug;
+    const user = req.cookies.user;
+    try {
+      const enroll = await Enrollment.findOne({ u_id: user._id });
+      if (enroll) {
+        const courseIndex = enroll.enrolledCourses.findIndex(
+          (course) => course.slug === slug
+        );
+        if (courseIndex !== -1) {
+          enroll.enrolledCourses.splice(courseIndex, 1);
+          enroll.save(res.redirect("/"));
+        } else {
+          res.status(404).send("This course is not exist!");
+        }
+      } else {
+        res.status(404).send("You haven't enrolled this course!");
+      }
+    } catch (e) {
+      console.log(e);
+      next(e);
     }
   }
   // POST /courses/enroll/:slug
@@ -149,7 +172,6 @@ class CourseDetailController {
         // Create new topic
         const newTopic = {
           t_title: topic,
-          assignments: [],
           files: [
             {
               f_title: title,

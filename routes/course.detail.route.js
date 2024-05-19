@@ -25,6 +25,11 @@ router.post(
   courseDetailController.handleEnrolment
 );
 router.get(
+  "/:slug/leave",
+  authenticateUser,
+  courseDetailController.leaveCourse
+);
+router.get(
   "/:slug/view/:topicIndex/:fileIndex",
   courseDetailController.viewFile
 );

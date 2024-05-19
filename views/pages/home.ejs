@@ -5,7 +5,8 @@
     <%- include('../partials/main') %>
   </head>
   <% if(typeof err === 'undefined') err = {} %> <% if(typeof user ===
-  'undefined') user = {} %>
+  'undefined') user = {} %> <% if(typeof announcements === 'undefined')
+  announcements = {} %>
   <body>
     <div class="app container bg-white border-top border-4 border-success">
       <%- include('../partials/header') %>
@@ -74,8 +75,105 @@
           giảng viên và bạn học. <br />Khoa Công nghệ thông tin
         </p>
       </div>
-      <h2>Hello</h2>
-      <%- include('../partials/footer') %>
+      <% if(user.role === "admin") {%>
+      <div class="mx-5">
+        <h2>New announcement</h2>
+        <form
+          method="post"
+          action="/announcement/upload"
+          enctype="multipart/form-data"
+        >
+          <div class="row mb-3">
+            <div class="col-sm-10">
+              <input
+                class="form-control"
+                type="text"
+                id="createdBy"
+                name="createdBy"
+                value="<%= user.name %>"
+                hidden
+              />
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label for="title" class="col-sm-3 col-form-label"
+              >Announcement title</label
+            >
+            <div class="col-sm-9">
+              <input
+                class="form-control"
+                type="text"
+                id="title"
+                name="title"
+                placeholder="Announcement title"
+              />
+              <p class="text-danger fst-italic" style="font-size: 14px">
+                <%= err.title %>
+              </p>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label for="body" class="col-sm-3 col-form-label"
+              >Announcement body</label
+            >
+            <div class="col-sm-9">
+              <textarea
+                class="form-control"
+                id="body"
+                name="body"
+                placeholder="Announcement body"
+              ></textarea>
+              <p class="text-danger fst-italic" style="font-size: 14px">
+                <%= err.body %>
+              </p>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label for="topicFile" class="col-sm-3 col-form-label">File</label>
+            <div class="col-sm-9">
+              <input
+                class="form-control"
+                type="file"
+                id="topicFile"
+                name="topicFile"
+                multiple
+              />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-9 offset-sm-3">
+              <input
+                class="btn btn-success"
+                type="submit"
+                value="Add new resource"
+              />
+            </div>
+          </div>
+        </form>
+      </div>
+      <%} %> <% if (announcements && announcements.length > 0) { %> <%
+      announcements.forEach(announcement => { %>
+      <div class="px-5 py-2">
+        <div class="bg-secondary-subtle px-4 py-1">
+          <h4><%= announcement.title %></h4>
+          <p class="mb-0">
+            <%= announcement.createdBy %> - <%=
+            announcement.createdAt.toLocaleString() %>
+          </p>
+        </div>
+        <p class="m-3"><%= announcement.body %></p>
+        <% if (announcement.files.length > 0) { %>
+        <p>Attached files:</p>
+        <ul>
+          <% announcement.files.forEach(file => { %>
+          <li><a href="<%= file.path %>" download><%= file.name %></a></li>
+          <% }); %>
+        </ul>
+        <% } %>
+      </div>
+      <% }); %><% } else { %>
+      <p>No announcements available.</p>
+      <% } %> <%- include('../partials/footer') %>
     </div>
   </body>
 </html>
