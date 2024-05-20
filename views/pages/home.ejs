@@ -152,9 +152,13 @@
           </div>
         </form>
       </div>
-      <%} %> <% if (announcements && announcements.length > 0) { %> <%
+      <%} %>
+      <div class="my-5">
+        <h3 class="px-5 py-2 border-bottom border-success">Announcements</h3>
+     
+      <% if (announcements && announcements.length > 0) { %> <%
       announcements.forEach(announcement => { %>
-      <div class="px-5 py-2">
+      <div class="mx-5 py-2 border-bottom">
         <div class="bg-secondary-subtle px-4 py-1 position-relative">
           <div class="d-flex justify-content-between">
             <h4><%= announcement.title %></h4>
@@ -284,13 +288,21 @@
                     type="submit"
                     value="Update announcement"
                   />
+                  <button class="btn btn-secondary" data-bs-toggle="collapse"
+                href="#update_<%=announcement._id%>"
+                aria-expanded="false"
+                aria-controls="update_<%=announcement._id%>">Cancel</button>
                 </div>
               </div>
             </form>
           </div>
         </div>
       </div>
-      <% }); %><% } else { %>
+      <% }); %>
+      <% if(numAnnounce > announcements.length) {%>
+        <a href="/announcement/list" class="ms-5 pb-5">Previous Announcements</a>
+      <%} %> </div>
+      <% } else { %>
       <p>No announcements available.</p>
       <% } %> <%- include('../partials/footer') %>
     </div>

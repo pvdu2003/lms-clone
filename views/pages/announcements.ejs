@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Courses</title>
+    <%- include('../partials/main') %>
+  </head>
+  <% if(typeof user === 'undefined') user = {} %> <% if(typeof announcements ===
+  'undefined') announcements = {} %>
+  <body>
+    <div class="app container bg-white border-top border-4 border-success">
+      <%- include('../partials/header') %>
+      <div class="m-4">
+        <h3>All announcements</h3>
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">Title</th>
+              <th scope="col">Created By</th>
+              <th scope="col">Created At</th>
+              <th scope="col">Updated At</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% announcements.forEach(announcement => { %>
+            <tr>
+              <th scope="row">
+                <a href="/announcement/<%= announcement._id %>"
+                  ><%= announcement.title %></a
+                >
+              </th>
+              <td><%= announcement.createdBy.toLocaleString() %></td>
+              <td><%= announcement.createdAt.toLocaleString() %></td>
+              <td><%= announcement.updatedAt.toLocaleString() %></td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+
+      <%- include('../partials/footer') %>
+    </div>
+  </body>
+</html>

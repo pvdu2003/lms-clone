@@ -14,7 +14,7 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage });
-
+router.get("/list", AnnouncementController.getAll);
 router.post(
   "/upload",
   authorizeUser("admin"),
@@ -32,4 +32,5 @@ router.delete(
   authorizeUser("admin"),
   AnnouncementController.deleteAnnouncement
 );
+router.get("/:id", AnnouncementController.getById);
 module.exports = router;

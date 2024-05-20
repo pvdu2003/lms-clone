@@ -50,8 +50,9 @@ class HomeController {
         .sort({
           updatedAt: -1,
         })
-        .limit(10);
-      res.render("pages/home", { user, announcements });
+        .limit(2);
+      const numAnnounce = await Announcements.countDocuments();
+      res.render("pages/home", { user, announcements, numAnnounce });
     } catch (error) {
       next(error);
     }

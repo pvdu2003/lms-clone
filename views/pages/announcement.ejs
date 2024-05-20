@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Courses</title>
+    <%- include('../partials/main') %>
+  </head>
+  <% if(typeof user === 'undefined') user = {} %> <% if(typeof announcements ===
+  'undefined') announcements = {} %>
+  <body>
+    <div class="app container bg-white border-top border-4 border-success">
+      <%- include('../partials/header') %>
+      <div class="my-2">
+      <h3 class="mx-5 mt-4 pb-2 border-bottom border-success">Announcements</h3>
+
+      <div class="mx-5 py-5 ">
+        <div class="bg-secondary-subtle px-4 py-1 position-relative">
+          <div class="d-flex justify-content-between">
+            <h4><%= announcement.title %></h4>
+            <% if(user.role === "admin") {%>
+            <i
+              class="fas fa-ellipsis-h pt-2"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#announce_<%=announcement._id%>"
+              aria-expanded="false"
+              aria-controls="announce_<%=announcement._id%>"
+            ></i>
+            <%} %>
+          </div>
+
+          <p class="mb-0">
+            By <%= announcement.createdBy %> - <%=
+            announcement.createdAt.toLocaleString() %>
+          </p>
+          <div
+            class="collapse z-1 position-absolute top-0 end-0 translate-middle-y me-5"
+            id="announce_<%=announcement._id%>"
+            style="width: 200px"
+          >
+            <div class="card card-body py-0">
+              <a
+                data-bs-toggle="collapse"
+                href="#update_<%=announcement._id%>"
+                role="button"
+                aria-expanded="false"
+                aria-controls="update_<%=announcement._id%>"
+                class="text-decoration-none text-dark py-1"
+                >Update announcement
+              </a>
+              <form method="post" action="/announcement/delete/<%=announcement._id%>?_method=DELETE">
+              <input type="submit" value="Delete announcement" class="btn btn-link text-decoration-none text-dark py-1 px-0"
+                ></input
+              ></form>
+            </div>
+          </div>
+        </div>
+        <% if(announcement.updatedAt.getTime() !==
+        announcement.createdAt.getTime()) {%>
+        <p class="m-3 text-success fw-medium">
+          Updated at: <%= announcement.updatedAt.toLocaleString() %>
+        </p>
+        <%} %>
+        <p class="m-3"><%= announcement.body %></p>
+        <% if (announcement.files.length > 0) { %>
+        <p>Attached files:</p>
+        <ul>
+          <% announcement.files.forEach(file => { %>
+          <li class="list-group-item">
+            <a href="<%= file.path %>" download><%= file.name %></a>
+          </li>
+          <% }); %>
+        </ul>
+        <% } %>
+
+        <div class="collapse" id="update_<%=announcement._id%>">
+          <div class="card card-body">
+            <form
+              method="post"
+              action="/announcement/update/<%=announcement._id%>?_method=PUT"
+              enctype="multipart/form-data"
+            >
+              <div class="row mb-3">
+                <div class="col-sm-10">
+                  <input
+                    class="form-control"
+                    type="text"
+                    id="createdBy"
+                    name="createdBy"
+                    value="<%= user.name %>"
+                    hidden
+                  />
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label for="title" class="col-sm-3 col-form-label"
+                  >Announcement title</label
+                >
+                <div class="col-sm-9">
+                  <input
+                    class="form-control"
+                    type="text"
+                    id="title"
+                    name="title"
+                    value="<%= announcement.title%>"
+                    placeholder="Announcement title"
+                  />
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label for="body" class="col-sm-3 col-form-label"
+                  >Announcement body</label
+                >
+                <div class="col-sm-9">
+                  <textarea
+                    class="form-control"
+                    id="body"
+                    name="body"
+                    placeholder="Announcement body"
+                  >
+                    <%= announcement.body%></textarea
+                  >
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label for="topicFile" class="col-sm-3 col-form-label"
+                  >File</label
+                >
+                <div class="col-sm-9">
+                  <input
+                    class="form-control"
+                    type="file"
+                    id="topicFile"
+                    name="topicFile"
+                    multiple
+                  />
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-9 offset-sm-3">
+                  <input
+                    class="btn btn-success"
+                    type="submit"
+                    value="Update announcement"
+                  />
+                  <button class="btn btn-secondary" data-bs-toggle="collapse"
+                href="#update_<%=announcement._id%>"
+                aria-expanded="false"
+                aria-controls="update_<%=announcement._id%>">Cancel</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <a href="/announcement/list" class="mt-3">View all announcements</a>
+      </div>
+    </div>
+      <%- include('../partials/footer') %>
+    </div>
+  </body>
+</html>
