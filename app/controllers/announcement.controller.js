@@ -12,14 +12,22 @@ class AnnouncementController {
       // Validate input fields
       let err = {};
       if (title.length === 0 || title === null) {
-        err.title = "Please enter a title for this announcement!";
+        err.title = "Please enter title for this announcement!";
       }
       if (body.length === 0 || body === null) {
-        err.body = "Please enter a body for this announcement!";
+        err.body = "Please enter body for this announcement!";
       }
+      const announcements = await Announcements.find()
+        .sort({
+          updatedAt: -1,
+        })
+        .limit(10);
       if (Object.keys(err).length > 0) {
-        const announcements = await Announcements.find();
-
+        return res.render("pages/home", { user, err, announcements });
+      }
+      const prevTitle = await Announcements.find({ title: title });
+      if (prevTitle === title) {
+        err.title = "This title is already exist!";
         return res.render("pages/home", { user, err, announcements });
       }
 
@@ -45,6 +53,58 @@ class AnnouncementController {
     } catch (error) {
       // Handle errors
       next(error);
+    }
+  }
+
+  // PUT/PATCH /announcement/update/:id
+  async updateAnnouncement(req, res, next) {
+    const user = req.cookies.user;
+    try {
+      const { id } = req.params;
+      const { title, body, createdBy } = req.body;
+      const files = req.files;
+      // Find the announcement to update
+      const announcement = await Announcements.findById(id);
+      if (!announcement) {
+        return res.status(404).json({ error: "Announcement not found" });
+      }
+
+      // Update the announcement
+      announcement.title = title;
+      announcement.body = body;
+      announcement.createdBy = createdBy;
+
+      // Handle file updates
+      if (files) {
+        // Remove existing files
+        announcement.files = [];
+
+        // Add new files
+        for (const file of files) {
+          announcement.files.push({
+            path: file.path,
+            name: file.originalname,
+          });
+        }
+      }
+
+      await announcement.save();
+      res.redirect("/");
+      // return res.status(200).json(announcement);
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+  }
+  // DELETE /announcement/delete/:id
+  async deleteAnnouncement(req, res, next) {
+    try {
+      const id = req.params.id;
+      await Announcements.findByIdAndDelete(id);
+      return res.redirect("/");
+    } catch (e) {
+      console.log(e);
+      res.status(500).send("Internal server error");
     }
   }
 }

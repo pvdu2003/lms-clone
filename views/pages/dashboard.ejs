@@ -10,7 +10,7 @@
   'undefined') courses = {} %>
   <body>
     <div class="app container bg-white border-top border-4 border-success">
-      <%- include('../partials/header') %>
+      <%- include('../partials/header') %> <% if(courses.length> 0) {%>
       <h3 class="ms-5">My Courses</h3>
       <ul class="list-group list-group-flush my-3">
         <% for(let i = 0; i < courses.length; i++) { %>
@@ -23,7 +23,12 @@
             courses[i].name[0] %> - <%= courses[i].name[1] %>
           </a>
         </li>
-        <% } %>
+        <% }} else { %>
+        <p class="text-center fw-medium fs-4 my-3">
+          You haven't enrolled any course before!<br />
+          <a href="/courses" class="fs-6">View course here</a>
+        </p>
+        <%} %>
       </ul>
       <%- include('../partials/footer') %>
     </div>

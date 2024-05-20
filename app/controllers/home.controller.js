@@ -46,7 +46,11 @@ class HomeController {
   async goHome(req, res, next) {
     try {
       const user = req.cookies.user;
-      const announcements = await Announcements.find();
+      const announcements = await Announcements.find()
+        .sort({
+          updatedAt: -1,
+        })
+        .limit(10);
       res.render("pages/home", { user, announcements });
     } catch (error) {
       next(error);

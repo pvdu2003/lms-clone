@@ -21,4 +21,15 @@ router.post(
   upload.array("topicFile", 10),
   AnnouncementController.uploadFile
 );
+router.put(
+  "/update/:id",
+  authorizeUser("admin"),
+  upload.array("topicFile", 10),
+  AnnouncementController.updateAnnouncement
+);
+router.delete(
+  "/delete/:id",
+  authorizeUser("admin"),
+  AnnouncementController.deleteAnnouncement
+);
 module.exports = router;
