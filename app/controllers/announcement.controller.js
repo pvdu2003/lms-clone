@@ -71,6 +71,7 @@ class AnnouncementController {
       const fileDetails = files.map((file) => ({
         path: file.path,
         name: file.originalname,
+        type: file.mimetype,
       }));
 
       // Create a new announcement

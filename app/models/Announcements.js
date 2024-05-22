@@ -11,6 +11,7 @@ const announcementSchema = new Schema(
       {
         path: { type: String, required: true },
         name: { type: String, required: true },
+        type: { type: String },
       },
     ],
     createdBy: { type: String, ref: "users", required: true },
