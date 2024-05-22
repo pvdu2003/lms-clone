@@ -10,9 +10,10 @@
   'undefined') courses = {} %>
   <body>
     <div class="app container bg-white border-top border-4 border-success">
-      <%- include('../partials/header') %> <% if(courses.length> 0) {%> <%
-      courses.forEach(course => { %>
+      <%- include('../partials/header') %> <% if(courses.length> 0) {%>
+
       <div class="row row-cols-1 row-cols-md-4 g-2 m-4">
+        <% courses.forEach(course => { %>
         <div class="col text-center">
           <div class="card h-100">
             <a href="/course/<%= course.slug %>">

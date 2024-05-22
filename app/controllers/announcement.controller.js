@@ -85,7 +85,7 @@ class AnnouncementController {
       await announcement.save();
 
       // Redirect to the homepage
-      return res.redirect("/home");
+      return res.redirect("/");
     } catch (error) {
       // Handle errors
       next(error);
@@ -97,7 +97,7 @@ class AnnouncementController {
     const user = req.cookies.user;
     try {
       const { id } = req.params;
-      const { title, body, createdBy } = req.body;
+      const { title, body, updatedBy } = req.body;
       const files = req.files;
       // Find the announcement to update
       const announcement = await Announcements.findById(id);
@@ -108,7 +108,7 @@ class AnnouncementController {
       // Update the announcement
       announcement.title = title;
       announcement.body = body;
-      announcement.createdBy = createdBy;
+      announcement.updatedBy = updatedBy;
 
       // Handle file updates
       if (files) {

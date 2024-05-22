@@ -110,7 +110,7 @@ class CourseDetailController {
 
         if (isEnrolled) {
           // User is already enrolled in the course
-          return res.redirect("/home");
+          return res.redirect("/");
         }
 
         enrollment.enrolledCourses.push({ slug, semester });
@@ -123,7 +123,7 @@ class CourseDetailController {
         await newEnrollment.save();
       }
 
-      return res.status(201).redirect("/home");
+      return res.status(201).redirect("/");
     } catch (error) {
       next(error);
     }

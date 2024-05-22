@@ -203,7 +203,7 @@
         <% if(announcement.updatedAt.getTime() !==
         announcement.createdAt.getTime()) {%>
         <p class="m-3 text-success fw-medium">
-          Updated at: <%= announcement.updatedAt.toLocaleString() %>
+          Updated at: <%= announcement.updatedAt.toLocaleString() %> By: <%=announcement.updatedBy%>
         </p>
         <%} %>
         <p class="m-3"><%= announcement.body %></p>
@@ -230,8 +230,8 @@
                   <input
                     class="form-control"
                     type="text"
-                    id="createdBy"
-                    name="createdBy"
+                    id="updatedBy"
+                    name="updatedBy"
                     value="<%= user.name %>"
                     hidden
                   />
@@ -303,7 +303,7 @@
         <a href="/announcement/list" class="ms-5 pb-5">Previous Announcements</a>
       <%} %> </div>
       <% } else { %>
-      <p>No announcements available.</p>
+      <p class="text-center">No announcements available.</p>
       <% } %> <%- include('../partials/footer') %>
     </div>
   </body>

@@ -77,7 +77,7 @@ class CourseController {
     let err = {};
     let formType = req.body.formType;
     if (formType === "cancel") {
-      return res.redirect("/home");
+      return res.redirect("/");
     }
     if (formType === "create") {
       if (c_id === "" || c_id === undefined) {
@@ -133,7 +133,7 @@ class CourseController {
         savedCourse.courseDetail = courseDetail._id;
         await savedCourse.save();
 
-        return res.status(201).redirect("/home");
+        return res.status(201).redirect("/");
       } catch (error) {
         next(error);
       }

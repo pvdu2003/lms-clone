@@ -14,6 +14,7 @@ const announcementSchema = new Schema(
       },
     ],
     createdBy: { type: String, ref: "users", required: true },
+    updatedBy: { type: String, ref: "users" },
   },
   {
     versionKey: false,
