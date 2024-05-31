@@ -56,5 +56,6 @@ router.delete(
   courseDetailController.deleteFile
 );
 router.delete("/:slug/delete-topic/:index", courseDetailController.deleteTopic);
+router.put("/:slug/update-topic/:id", courseDetailController.updateTopic);
 router.get("/:slug", authenticateUser, courseDetailController.getCourse);
 module.exports = router;

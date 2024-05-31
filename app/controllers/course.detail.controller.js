@@ -96,8 +96,8 @@ class CourseDetailController {
       const user = req.cookies.user;
       const err = {};
 
-      const course = await Courses.findOne({ slug, code });
-      if (!course) {
+      const course = await Courses.findOne({ slug });
+      if (course.code !== code) {
         err.code = "Enrollment key is not correct! Try again!";
         return res.render("pages/enrollment", { user, err, course });
       }
@@ -227,12 +227,8 @@ class CourseDetailController {
 
       // If a new file was uploaded, update the URL
       if (topicFile) {
-        // Here, you would need to handle the file upload, e.g., using a file storage service
-        // and update the 'url' field of the file accordingly
         courseDetail.topics[index].files[fileIndex].url = topicFile.path;
       }
-
-      // Save the updated course detail document
       await courseDetail.save();
 
       res.redirect(`/course/${slug}`);
@@ -255,21 +251,34 @@ class CourseDetailController {
       res.status(500).send("Fails to delete file");
     }
   }
+  // PUT /course/:slug/update-topic/:id
+  async updateTopic(req, res, next) {
+    try {
+      let user = req.cookies.user;
+      let { slug, id } = req.params;
+      let t_title = req.body.t_title;
+      const courseDetail = await CourseDetail.findOneAndUpdate(
+        { slug, "topics._id": id },
+        { $set: { "topics.$.t_title": t_title } }
+      );
+      if (!courseDetail) {
+        res.status(404).send("This topic is not found!");
+      }
+      res.redirect("/course/" + slug);
+    } catch (e) {
+      console.log(e);
+      res.status(404).json({ message: "Topic is not found!" });
+    }
+  }
   // DELETE /course/:slug/delete-topic/:index
   async deleteTopic(req, res, next) {
     try {
       const { slug, index } = req.params;
-
-      // Find the course detail document
       const courseDetail = await CourseDetail.findOne({ slug });
 
       // Remove the topic from the course detail document
       courseDetail.topics.splice(index, 1);
-
-      // Save the updated course detail document
       await courseDetail.save();
-
-      // Redirect to the course page
       res.redirect(`/course/${slug}`);
     } catch (error) {
       console.error("Error deleting topic:", error);

@@ -55,7 +55,20 @@
               </div>
             </button>
             <div class="d-flex justify-content-end me-4">
-              <button class="btn btn-success me-3" type="button">Update</button>
+              <form
+                action="/course/<%= slug %>/update-topic/<%= t._id %>?_method=PUT"
+                method="post"
+              >
+                <input
+                  type="text"
+                  name="t_title"
+                  id="t_title"
+                  placeholder="Enter new topic's title"
+                />
+                <button class="btn btn-success me-3" type="submit">
+                  Update
+                </button>
+              </form>
               <form
                 method="post"
                 action="/course/<%= slug %>/delete-topic/<%= index %>?_method=DELETE"
